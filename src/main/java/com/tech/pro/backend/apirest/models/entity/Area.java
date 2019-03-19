@@ -22,7 +22,7 @@ public class Area  implements Serializable{
 	@Column(name="id_area")
 	private Long id;
 	
-	@NotEmpty(message="El valor no puede ser vació")
+	@NotEmpty(message="El valor no puede ser vacío")
 	@Size(min=4, max =100)
 	@Column(nullable=false, unique=true)
 	private String valor;
