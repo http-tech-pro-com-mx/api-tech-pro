@@ -11,13 +11,13 @@ import com.tech.pro.backend.apirest.models.entity.Personal;
 import com.tech.pro.backend.apirest.services.PersonalServiceImpl;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/personal")
 public class PersonalRestController {
 	
 	@Autowired
 	private PersonalServiceImpl personal;
 	
-	@GetMapping("/personal")
+	@GetMapping("/findAll")
 	public List<Personal> index(){
 		return personal.findAll();
 	} 

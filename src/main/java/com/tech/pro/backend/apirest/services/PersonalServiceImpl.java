@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tech.pro.backend.apirest.models.dao.IPersonalDao;
+import com.tech.pro.backend.apirest.models.entity.Perfil;
 import com.tech.pro.backend.apirest.models.entity.Personal;
 
 @Service
@@ -19,6 +20,12 @@ public class PersonalServiceImpl implements IPersonalService{
 	@Transactional(readOnly = true)
 	public List<Personal> findAll() {
 		return (List<Personal>)personalDao.findAll();
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<Perfil> findAllPerfil() {
+		return (List<Perfil> ) personalDao.findAllPerfil();
 	}
 
 }

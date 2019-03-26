@@ -11,13 +11,13 @@ import com.tech.pro.backend.apirest.models.entity.Area;
 import com.tech.pro.backend.apirest.services.AreaServiceImpl;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/areas")
 public class AreaRestController {
 	
 	@Autowired
 	private AreaServiceImpl areaService;
 	
-	@GetMapping("/areas")
+	@GetMapping("/findAll")
 	public List<Area> index(){
 		return areaService.findAll();
 	} 

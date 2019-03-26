@@ -53,6 +53,12 @@ public class Personal implements Serializable {
 	@JoinColumn(name="id_area")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Area area;
+	
+	@NotNull(message="El perfil no puede ser vacio")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="id_perfil")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	private Perfil perfil;
 
 	public Long getId() {
 		return id;
@@ -108,6 +114,14 @@ public class Personal implements Serializable {
 
 	public void setArea(Area area) {
 		this.area = area;
+	}
+
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 	
 	

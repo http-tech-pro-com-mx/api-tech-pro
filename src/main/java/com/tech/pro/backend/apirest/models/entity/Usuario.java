@@ -1,7 +1,9 @@
 package com.tech.pro.backend.apirest.models.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,8 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,11 +49,16 @@ public class Usuario implements Serializable {
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Personal personal;
 	
-	@NotNull(message="Se requiere tener un perfil")
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="id_perfil")
-	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-	private Perfil perfil;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	/*
+	 * en caso de que la tabla de relacion no se llame usuarios_roles
+	 */
+	@JoinTable(name="tech_usuario_rol", joinColumns = @JoinColumn(name="id_usuario")
+	, inverseJoinColumns = @JoinColumn(name ="id_rol")
+	, uniqueConstraints = {@UniqueConstraint(columnNames= {"id_usuario","id_rol"})})
+	private List<Rol> roles;
+	
+	private Boolean estatus;
 
 	public Long getId() {
 		return id;
@@ -89,18 +99,22 @@ public class Usuario implements Serializable {
 	public void setPersonal(Personal personal) {
 		this.personal = personal;
 	}
-
-	public Perfil getPerfil() {
-		return perfil;
+	
+	public List<Rol> getRoles() {
+		return roles;
 	}
 
-	public void setPerfil(Perfil perfil) {
-		this.perfil = perfil;
+	public void setRoles(List<Rol> roles) {
+		this.roles = roles;
 	}
-	
-	
-	
-	
-	
+
+	public Boolean getEstatus() {
+		return estatus;
+	}
+
+	public void setEstatus(Boolean estatus) {
+		this.estatus = estatus;
+	}
+
 
 }
