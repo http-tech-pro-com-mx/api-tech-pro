@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
 	
 	@Autowired
-	private BCryptPasswordEncoder paswordEncoder;
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	@Qualifier("authenticationManager")
@@ -28,14 +28,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		// TODO Auto-generated method stub
-		super.configure(security);
+		security.tokenKeyAccess("permitAll()")
+		.checkTokenAccess("isAuthenticated()");
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		// TODO Auto-generated method stub
-		super.configure(clients);
+		clients.inMemory().withClient("tech-pro-app")
+		.secret(passwordEncoder.encode("t3chPr02019"))
+		.scopes("read","write")
+		//.authorizedGrantTypes("password","refresh_token")
+		.authorizedGrantTypes("password")
+		.accessTokenValiditySeconds(3600);
+		//.refreshTokenValiditySeconds(3600);
 	}
 
 	@Override
