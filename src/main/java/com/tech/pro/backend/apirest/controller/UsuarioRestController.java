@@ -3,6 +3,7 @@ package com.tech.pro.backend.apirest.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +20,13 @@ public class UsuarioRestController {
 	@Autowired
 	private UsuarioServiceImpl usuarioServiceImpl;
 	
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/findAll")
 	public List<Usuario> index(){
 		return usuarioServiceImpl.findAll();
 	} 
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/findByUser/{usuario}")
 	public Usuario findByUser(@PathVariable String usuario){
 		return usuarioServiceImpl.findByUsuario(usuario);
