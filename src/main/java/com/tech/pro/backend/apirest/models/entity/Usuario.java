@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
@@ -44,7 +45,7 @@ public class Usuario implements Serializable {
 	private int userid;
 	
 	@NotNull(message="Se requiere ser personal de tech")
-	@ManyToOne(fetch=FetchType.LAZY)
+	@OneToOne
 	@JoinColumn(name="id_personal")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Personal personal;

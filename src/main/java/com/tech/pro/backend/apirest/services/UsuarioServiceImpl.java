@@ -40,6 +40,12 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 		
 		return new User(usuario.getUsuario(),usuario.getContrasenia(),usuario.getEstatus(), true, true, true, authorities);
 	}
+
+
+	@Override
+	public Usuario findByUsuario(String usuario) {
+		return usuarioDao.findByUsuario(usuario);
+	}
 	
 
 }

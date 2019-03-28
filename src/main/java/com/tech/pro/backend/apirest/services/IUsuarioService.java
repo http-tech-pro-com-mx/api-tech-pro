@@ -9,4 +9,5 @@ public interface IUsuarioService {
 	
 	public List<Usuario> findAll();
 	
+	public Usuario findByUsuario(String usuario);
 }
