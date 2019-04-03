@@ -40,10 +40,20 @@ public class UsuarioRestController {
 	public ResponseEntity<?> findByUser(@PathVariable String usuario){
 		Map<String, Object> response =  new HashMap<>();
 		Usuario getUser  = usuarioServiceImpl.findByUsuario(usuario);
-		List<Area> listaAreas = areaServiceImpl.findAll();
-		response.put("areas", listaAreas);
-		response.put("getUser", getUser);
+		
+		if(getUser != null) {
+			List<Area> listaAreas = areaServiceImpl.findAll();
+			response.put("areas", listaAreas);
+			response.put("getUser", getUser);
+		    response.put("successful", true);
+			
+		}else {
+			response.put("successful", false);
+			response.put("message", "No se encontro información de perfil");
+		}
+		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		
 	} 
 	
 }
