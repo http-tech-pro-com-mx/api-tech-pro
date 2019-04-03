@@ -2,7 +2,7 @@ package com.tech.pro.backend.apirest.models.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -26,8 +26,7 @@ public class Personal implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id_personal")
-	private Long id;
+	private Long id_personal;
 	
 	@NotEmpty(message="El nombre no puede estar vacío")
 	@Size(max =50)
@@ -60,12 +59,14 @@ public class Personal implements Serializable {
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Perfil perfil;
 
-	public Long getId() {
-		return id;
+	
+
+	public Long getId_personal() {
+		return id_personal;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId_personal(Long id_personal) {
+		this.id_personal = id_personal;
 	}
 
 	public String getNombre() {

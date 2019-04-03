@@ -21,8 +21,7 @@ public class Perfil implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id_perfil")
-	private Long id;
+	private Long id_perfil;
 	
 	@NotEmpty(message="El valor no puede ser vacío")
 	@Size(min=4, max =100)
@@ -37,12 +36,14 @@ public class Perfil implements Serializable{
 	@NotNull
 	private int activo;
 
-	public Long getId() {
-		return id;
+	
+
+	public Long getId_perfil() {
+		return id_perfil;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId_perfil(Long id_perfil) {
+		this.id_perfil = id_perfil;
 	}
 
 	public String getValor() {

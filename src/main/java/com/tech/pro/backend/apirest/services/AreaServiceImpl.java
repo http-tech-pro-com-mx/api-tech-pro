@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import com.tech.pro.backend.apirest.models.dao.IAreaDao;
 import com.tech.pro.backend.apirest.models.entity.Area;
 

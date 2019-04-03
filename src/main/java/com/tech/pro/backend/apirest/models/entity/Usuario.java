@@ -29,8 +29,7 @@ public class Usuario implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id_usuario")
-	private Long id;
+	private Long id_usuario;
 	
 	@NotEmpty(message="El usuario no puede ser vacío")
 	@Size(min=4, max =15)
@@ -60,12 +59,13 @@ public class Usuario implements Serializable {
 	
 	private Boolean estatus;
 
-	public Long getId() {
-		return id;
+	
+	public Long getId_usuario() {
+		return id_usuario;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId_usuario(Long id_usuario) {
+		this.id_usuario = id_usuario;
 	}
 
 	public String getUsuario() {

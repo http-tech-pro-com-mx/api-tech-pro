@@ -11,16 +11,18 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="tech_area")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Area  implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id_area")
-	private Long id;
+	private Long id_area;
 	
 	@NotEmpty(message="El valor no puede ser vacío")
 	@Size(min=4, max =100)
@@ -34,12 +36,13 @@ public class Area  implements Serializable{
 	
 	private int activo;
 
-	public Long getId() {
-		return id;
+	
+	public Long getId_area() {
+		return id_area;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId_area(Long id_area) {
+		this.id_area = id_area;
 	}
 
 	public String getValor() {
