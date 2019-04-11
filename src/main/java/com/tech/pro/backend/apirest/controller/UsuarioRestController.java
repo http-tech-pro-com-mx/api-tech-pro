@@ -6,19 +6,16 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.util.MultiValueMap;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.databind.node.TextNode;
 import com.tech.pro.backend.apirest.models.entity.Area;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.AreaServiceImpl;
@@ -34,6 +31,11 @@ public class UsuarioRestController {
 	
 	@Autowired
 	private AreaServiceImpl areaServiceImpl;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
+
 	
 	@Secured({"ROLE_CONSULTA_USUARIO"})
 	@GetMapping("/findAll")
@@ -64,10 +66,16 @@ public class UsuarioRestController {
 	
 	@Secured({"ROLE_CAMBIAR_PWD"})
 	@PostMapping(path="/changePassword")
-	public ResponseEntity<?> changePassword(@RequestBody  Map<String,String> params){
+	public ResponseEntity<?> changePassword(@AuthenticationPrincipal String user_active, @RequestBody  Map<String,String> params){
 		Map<String, Object> response =  new HashMap<>();
-		response.put("actual", params.get("actual"));
-		response.put("nueva", params.get("nueva"));
+		//String actualEncrypt = params.get("actual");
+		//passwordEncoder.encode(actualEncrypt);
+		
+		Usuario user = usuarioServiceImpl.findByUsuario(user_active);
+		
+		
+		response.put("token header personal", user.getPersonal().getCorreo_electronico());
+		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		
 	}

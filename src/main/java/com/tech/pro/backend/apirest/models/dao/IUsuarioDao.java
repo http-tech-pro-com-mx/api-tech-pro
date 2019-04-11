@@ -14,4 +14,6 @@ public interface IUsuarioDao extends JpaRepository<Usuario, Long>{
 	
 	@Query("select u from Usuario u where u.usuario=?1")
 	public Usuario findByUsernameEjemplo(String usuario);
+	
+	
 }
