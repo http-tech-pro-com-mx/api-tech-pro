@@ -68,13 +68,30 @@ public class UsuarioRestController {
 	@PostMapping(path="/changePassword")
 	public ResponseEntity<?> changePassword(@AuthenticationPrincipal String user_active, @RequestBody  Map<String,String> params){
 		Map<String, Object> response =  new HashMap<>();
-		//String actualEncrypt = params.get("actual");
-		//passwordEncoder.encode(actualEncrypt);
+		String actual = params.get("actual");
+		String nueva = params.get("nueva");
 		
 		Usuario user = usuarioServiceImpl.findByUsuario(user_active);
+	
+		if(passwordEncoder.matches(actual, user.getContrasenia())) {
+			
+			if(passwordEncoder.matches(nueva,user.getContrasenia())){
+				response.put("successful", false);
+				response.put("message", "La contraseña nueva no puede ser igual a la actual");
+			}else {
+				
+				String encryp = passwordEncoder.encode(nueva);
+				usuarioServiceImpl.updateContrasenia(encryp, user.getId_usuario());
+				response.put("successful", true);
+				response.put("message", "Contraseña actualizada");
+			}
+
+		}else {
+			response.put("successful", false);
+			response.put("message", "La contraseña actual es incorrecta");
+		}
 		
 		
-		response.put("token header personal", user.getPersonal().getCorreo_electronico());
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		

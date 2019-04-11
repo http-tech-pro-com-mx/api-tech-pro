@@ -43,9 +43,19 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 
 
 	@Override
+	@Transactional(readOnly = true)
 	public Usuario findByUsuario(String usuario) {
 		return usuarioDao.findByUsuario(usuario);
 	}
+
+
+	@Override
+	@Transactional
+	public void updateContrasenia(String contrasenia, Long id_usuario) {
+		  usuarioDao.updateContrasenia(contrasenia, id_usuario);
+	}
+	
+	
 	
 
 }

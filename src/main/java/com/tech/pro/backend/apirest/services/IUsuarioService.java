@@ -10,4 +10,6 @@ public interface IUsuarioService {
 	public List<Usuario> findAll();
 	
 	public Usuario findByUsuario(String usuario);
+	
+	public void updateContrasenia(String contrasenia, Long id_usuario);
 }
