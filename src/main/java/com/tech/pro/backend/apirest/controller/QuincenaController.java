@@ -33,7 +33,7 @@ public class QuincenaController {
 	
 	@GetMapping("/findAllAnioAndMonth")
 	public  ResponseEntity<?> findAllAnioAndMonth(){
-		
+
 		Map<String, Object> response =  new HashMap<>();
 		response.put("meses", quincena.findAllMoth());
 		response.put("anios", quincena.findAllAnio());
@@ -44,13 +44,16 @@ public class QuincenaController {
 	}
 	
 	@Secured({"ROLE_CONSULTA"})
-	@PostMapping(path="/consultaRegistroQuincena")
-	public ResponseEntity<?> consultaRegistroQuincena(@AuthenticationPrincipal String user_active, @RequestBody  Map<String,String> params){
+	@PostMapping(path="/historialQuincena")
+	public ResponseEntity<?> historialQuincena(@AuthenticationPrincipal String user_active, @RequestBody  Map<String,String> params){
 		Map<String, Object> response =  new HashMap<>();
+		List<Object[]> lista = null;
+		lista = quincena.historialQuincena("2019-03-01", "2019-03-15", "3401");
+		//String anio = params.get("anio");
+		//String mes = params.get("mes");
+		//String quincena = params.get("quincena");
+		response.put("procedimiento", lista);
 		
-		String anio = params.get("anio");
-		String mes = params.get("mes");
-		String quincena = params.get("quincena");
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}

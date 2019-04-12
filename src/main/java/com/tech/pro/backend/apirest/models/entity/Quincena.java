@@ -2,15 +2,19 @@ package com.tech.pro.backend.apirest.models.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ParameterMode;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,6 +26,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="tech_quincena")
+@NamedStoredProcedureQueries({
+	@NamedStoredProcedureQuery(
+	name = "sp_historial_entrada", 
+	procedureName = "sp_historial_entrada",
+	parameters = {
+	    @StoredProcedureParameter(name="fecha_inicio", type=String.class, mode=ParameterMode.IN),
+	    @StoredProcedureParameter(name="fecha_fin", type=String.class, mode=ParameterMode.IN),
+	    @StoredProcedureParameter(name="badgenumber", type=String.class, mode=ParameterMode.IN),
+	    @StoredProcedureParameter(name="outputParam", type=List.class, mode=ParameterMode.OUT)
+	})
+})
 public class Quincena implements Serializable {
 
 	private static final long serialVersionUID = 1L;
