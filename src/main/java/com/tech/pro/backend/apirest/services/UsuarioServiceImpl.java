@@ -1,6 +1,7 @@
 package com.tech.pro.backend.apirest.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,12 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	@Transactional
 	public void updateContrasenia(String contrasenia, Long id_usuario) {
 		  usuarioDao.updateContrasenia(contrasenia, id_usuario);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Optional<Usuario> findById(Long id_usuario) {
+		return usuarioDao.findById(id_usuario);
 	}
 	
 	

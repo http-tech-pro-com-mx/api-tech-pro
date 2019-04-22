@@ -58,7 +58,9 @@ public class Personal implements Serializable {
 	@JoinColumn(name="id_perfil")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Perfil perfil;
-
+	
+	
+	private String nombre_foto;
 	
 
 	public Long getId_personal() {
@@ -123,6 +125,14 @@ public class Personal implements Serializable {
 
 	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;
+	}
+
+	public String getNombre_foto() {
+		return nombre_foto;
+	}
+
+	public void setNombre_foto(String nombre_foto) {
+		this.nombre_foto = nombre_foto;
 	}
 	
 	

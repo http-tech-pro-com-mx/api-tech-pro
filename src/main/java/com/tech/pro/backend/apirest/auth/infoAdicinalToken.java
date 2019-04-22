@@ -32,6 +32,7 @@ public class infoAdicinalToken implements TokenEnhancer{
 		additionalInfo.put("apellido_paterno", datos_personales.getApellido_paterno());
 		additionalInfo.put("apellido_materno", datos_personales.getApellido_materno());
 		additionalInfo.put("genero", datos_personales.getGenero());
+		additionalInfo.put("nombre_foto", datos_personales.getNombre_foto());
 		additionalInfo.put("id_personal", datos_personales.getId_personal());
 		additionalInfo.put("id_perfil", datos_personales.getPerfil().getId_perfil());
 		additionalInfo.put("id_area", datos_personales.getArea().getId_area());

@@ -1,6 +1,6 @@
 package com.tech.pro.backend.apirest.services;
 
-import java.sql.Date;
+
 
 import java.util.List;
 
@@ -64,6 +64,8 @@ public class IQuincenaServiceImpl implements IQuincenaService {
 	        }
 	        return object;
 	}
+	
+	
 	
 	
 	

@@ -1,10 +1,14 @@
 package com.tech.pro.backend.apirest.controller;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -15,10 +19,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.tech.pro.backend.apirest.models.entity.Area;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.AreaServiceImpl;
+import com.tech.pro.backend.apirest.services.UploadServiceImpl;
 import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;
 
 
@@ -34,6 +42,9 @@ public class UsuarioRestController {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private UploadServiceImpl uploadServiceImpl;
 	
 
 	
@@ -95,6 +106,28 @@ public class UsuarioRestController {
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		
+	}
+	
+	@GetMapping("/getImageProfile/{genero}/{nombre:.+}")
+	public ResponseEntity<?> upload(@PathVariable int genero, @PathVariable String nombre){
+		//Map<String, Object> response = new HashMap<>();
+		
+		Resource resourceImage = null;
+		
+		try {
+			resourceImage = uploadServiceImpl.cargar("images/profiles", nombre, genero);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		HttpHeaders cabecera = new HttpHeaders();
+		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; file=\""+resourceImage.getFilename()+ "\"");
+		
+		
+		//return  new  ResponseEntity<Map<String, Object>>(response,  HttpStatus.OK);
+		
+		return new ResponseEntity<Resource>(resourceImage, cabecera,HttpStatus.OK);
 	}
 	
 }
