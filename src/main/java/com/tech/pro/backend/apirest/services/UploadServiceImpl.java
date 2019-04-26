@@ -1,12 +1,17 @@
 package com.tech.pro.backend.apirest.services;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -19,7 +24,7 @@ import com.tech.pro.backend.apirest.utils.Constantes;
 public class UploadServiceImpl implements IUploadFileService{
 
 	@Override
-	public Resource cargar(String directorio,String nombre, int genero) throws MalformedURLException {
+	public Resource cargarImgPerfil(String directorio,String nombre, int genero) throws MalformedURLException {
 		Path rutaArchivo = getPath(directorio, nombre);
 		UrlResource resourceImage = null;
 	
@@ -66,5 +71,49 @@ public class UploadServiceImpl implements IUploadFileService{
 	public Path getPath(String directorio, String nombre) {
 		return Paths.get(Constantes.DIRECTORIO_UPLOAD +"/" + directorio).resolve(nombre).toAbsolutePath();
 	}
+
+	@Override
+	public int validaImagen(MultipartFile archivo) throws IOException {
+		int error_code = 0; // 0 es todo OK
+		
+		if(archivo.isEmpty()) {
+			//ARCHIVO VACIO
+			error_code = 1;
+		}else if(archivo.getContentType() != null && !archivo.getContentType().toLowerCase().startsWith("image")) {
+			//NO ES IMAGEN
+			error_code = 2;
+		}else {
+			
+			if ((archivo.getSize() / 1024) > 4096) {
+				//EXCEDE TAMAÑO PERMITIDO MAX 4MB
+				error_code = 3;
+			}else{
+
+				InputStream in = new ByteArrayInputStream(archivo.getBytes()); 
+				BufferedImage image = ImageIO.read(in);
+			
+				
+				if(image.getWidth() < 100 || image.getHeight() < 100) {
+					//IMAGEN MUY PEQUEÑA
+					error_code = 4;
+				}else if(image.getWidth() > 800 || image.getHeight() > 800) {
+					//IMAGEN MUY GRANDE
+					error_code = 5;
+				}
+				
+				image.flush();
+				in.close();
+				
+			}
+		}
+		
+		
+		
+		return error_code;
+		
+	}
+	
+
+	
 
 }

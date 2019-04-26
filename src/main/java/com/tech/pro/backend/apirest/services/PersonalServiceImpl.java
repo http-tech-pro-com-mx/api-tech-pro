@@ -28,4 +28,12 @@ public class PersonalServiceImpl implements IPersonalService{
 		return (List<Perfil> ) personalDao.findAllPerfil();
 	}
 
+	@Override
+	@Transactional
+	public Personal save(Personal personal) {
+		return personalDao.save(personal);
+	}
+	
+	
+
 }

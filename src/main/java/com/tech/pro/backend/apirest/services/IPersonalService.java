@@ -9,4 +9,6 @@ public interface IPersonalService {
 	public List<Personal> findAll();
 	
 	public List<Perfil> findAllPerfil();
+	
+	public Personal save(Personal personal);
 }

@@ -18,7 +18,7 @@ import com.tech.pro.backend.apirest.models.entity.Mes;
 import com.tech.pro.backend.apirest.models.entity.Quincena;
 
 @Service
-public class IQuincenaServiceImpl implements IQuincenaService {
+public class QuincenaServiceImpl implements IQuincenaService {
 	
 	@Autowired
 	private IQuincenaDao iQuincenaDao;

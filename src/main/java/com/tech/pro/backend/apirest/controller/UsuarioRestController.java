@@ -1,5 +1,6 @@
 package com.tech.pro.backend.apirest.controller;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tech.pro.backend.apirest.models.entity.Area;
+import com.tech.pro.backend.apirest.models.entity.Personal;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.AreaServiceImpl;
+import com.tech.pro.backend.apirest.services.PersonalServiceImpl;
 import com.tech.pro.backend.apirest.services.UploadServiceImpl;
 import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;
 
@@ -45,6 +48,9 @@ public class UsuarioRestController {
 	
 	@Autowired
 	private UploadServiceImpl uploadServiceImpl;
+	
+	@Autowired
+	private PersonalServiceImpl personalServiceImpl;
 	
 
 	
@@ -110,12 +116,11 @@ public class UsuarioRestController {
 	
 	@GetMapping("/getImageProfile/{genero}/{nombre:.+}")
 	public ResponseEntity<?> upload(@PathVariable int genero, @PathVariable String nombre){
-		//Map<String, Object> response = new HashMap<>();
 		
 		Resource resourceImage = null;
 		
 		try {
-			resourceImage = uploadServiceImpl.cargar("images/profiles", nombre, genero);
+			resourceImage = uploadServiceImpl.cargarImgPerfil("images/profiles", nombre, genero);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -124,10 +129,69 @@ public class UsuarioRestController {
 		HttpHeaders cabecera = new HttpHeaders();
 		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; file=\""+resourceImage.getFilename()+ "\"");
 		
-		
-		//return  new  ResponseEntity<Map<String, Object>>(response,  HttpStatus.OK);
-		
 		return new ResponseEntity<Resource>(resourceImage, cabecera,HttpStatus.OK);
+	}
+	
+	@PostMapping("/imageProfile/upload")
+	public ResponseEntity<?> upload (@RequestParam MultipartFile archivo, @RequestParam int id){
+		Map<String, Object> response = new HashMap<>();
+		
+		Long id2 = (long) 2;
+		Personal datos = usuarioServiceImpl.findById(id2).getPersonal();
+		
+		int error_code;
+		String mensaje = null;
+		boolean status = false;
+		
+		try {
+			error_code = uploadServiceImpl.validaImagen(archivo);
+		} catch (IOException e) {
+			response.put("successful",status);
+			response.put("mensaje", e.getMessage().concat(": ".concat(e.getCause().getMessage())));
+			return new  ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		}
+		
+
+		switch (error_code) {
+		case 0:
+			String nombre_foto= null;
+			try {
+				nombre_foto = uploadServiceImpl.copiar("images/profiles", archivo);
+			} catch (IOException e) {
+				response.put("successful",status);
+				response.put("mensaje", e.getMessage().concat(": ".concat(e.getCause().getMessage())));
+				return new  ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+			}
+			
+			String foto_anterior = datos.getNombre_foto();
+			uploadServiceImpl.eliminar("images/profiles", foto_anterior);
+			
+			datos.setNombre_foto(nombre_foto);
+			personalServiceImpl.save(datos);
+			status = true;
+			mensaje = "OK";
+			break;
+		case 1:
+			mensaje = "No se encontró el archivo";
+			break;
+		case 2:
+			mensaje = "Formato no valido";
+			break;
+		case 3:
+			mensaje = "Tamaño máximo soportado 4MB";
+			break;
+		case 4:
+			mensaje = "Imagen demasiado pequeña";
+			break;
+		case 5:
+			mensaje = "Imagen demasiado grande";
+			break;
+		}
+		
+		response.put("successful", status);
+		response.put("message", mensaje);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
 }

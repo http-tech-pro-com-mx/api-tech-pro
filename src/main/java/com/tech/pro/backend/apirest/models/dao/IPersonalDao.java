@@ -12,5 +12,6 @@ public interface IPersonalDao extends JpaRepository<Personal, Long>{
 	
 	@Query("from Perfil")
 	public List<Perfil> findAllPerfil();
+	
 
 }
