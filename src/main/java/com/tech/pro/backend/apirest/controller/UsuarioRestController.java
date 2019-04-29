@@ -133,11 +133,11 @@ public class UsuarioRestController {
 	}
 	
 	@PostMapping("/imageProfile/upload")
-	public ResponseEntity<?> upload (@RequestParam MultipartFile archivo, @RequestParam int id){
+	public ResponseEntity<?> upload (@RequestParam MultipartFile archivo,  @RequestParam("id_personal") Long id_personal){
 		Map<String, Object> response = new HashMap<>();
 		
-		Long id2 = (long) 2;
-		Personal datos = usuarioServiceImpl.findById(id2).getPersonal();
+		
+		Personal datos = personalServiceImpl.findById(id_personal);
 		
 		int error_code;
 		String mensaje = null;
@@ -157,6 +157,7 @@ public class UsuarioRestController {
 			String nombre_foto= null;
 			try {
 				nombre_foto = uploadServiceImpl.copiar("images/profiles", archivo);
+				response.put("nombre_foto", nombre_foto);
 			} catch (IOException e) {
 				response.put("successful",status);
 				response.put("mensaje", e.getMessage().concat(": ".concat(e.getCause().getMessage())));

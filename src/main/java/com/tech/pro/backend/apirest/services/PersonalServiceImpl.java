@@ -33,6 +33,11 @@ public class PersonalServiceImpl implements IPersonalService{
 	public Personal save(Personal personal) {
 		return personalDao.save(personal);
 	}
+
+	@Override
+	public Personal findById(Long id_personal) {
+		return personalDao.findById(id_personal).orElse(null);
+	}
 	
 	
 

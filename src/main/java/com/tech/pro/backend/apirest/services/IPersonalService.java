@@ -11,4 +11,6 @@ public interface IPersonalService {
 	public List<Perfil> findAllPerfil();
 	
 	public Personal save(Personal personal);
+	
+	public Personal findById(Long id_personal);
 }
