@@ -14,4 +14,6 @@ public interface IUsuarioService {
 	public void updateContrasenia(String contrasenia, Long id_usuario);
 	
 	public Usuario findById(Long id_usuario);
+	
+	public String findBadgeNumber(Long userid);
 }

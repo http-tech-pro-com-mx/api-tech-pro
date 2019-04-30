@@ -41,17 +41,19 @@ public class QuincenaServiceImpl implements IQuincenaService {
 		return  iQuincenaDao.findAllMoth();
 	}
 
+	
 	@Override
-	public List<Object[]> historialQuincena(String fecha_inicio, String fecha_fin, String badgenumber) {
+	public List<Object[]> reporteEntradaSalida(Long id_anio, Long id_mes, int numero_quincena, String badgenumber) {
 		List<Object[]> object = null;
 		 try
 	        {
-	            StoredProcedureQuery storedProcedure = manager.createStoredProcedureQuery("sp_historial_entrada")
-	                    .registerStoredProcedureParameter(0 , String.class , ParameterMode.IN)
-	                    .registerStoredProcedureParameter(1 , String.class, ParameterMode.IN)
-	                    .registerStoredProcedureParameter(2 , String.class, ParameterMode.IN);
+	            StoredProcedureQuery storedProcedure = manager.createStoredProcedureQuery("sp_reporteEntradaSalida")
+	                    .registerStoredProcedureParameter(0 , Long.class , ParameterMode.IN)
+	                    .registerStoredProcedureParameter(1 , Long.class, ParameterMode.IN)
+	                    .registerStoredProcedureParameter(2 , Integer.class, ParameterMode.IN)
+	                    .registerStoredProcedureParameter(3 , String.class, ParameterMode.IN);
 	             
-	            storedProcedure.setParameter(0, fecha_inicio).setParameter(1, fecha_fin).setParameter(2, badgenumber);
+	            storedProcedure.setParameter(0, id_anio).setParameter(1, id_mes).setParameter(2, numero_quincena).setParameter(3, badgenumber);
 	             
 	            storedProcedure.execute();
 	            
@@ -64,6 +66,8 @@ public class QuincenaServiceImpl implements IQuincenaService {
 	        }
 	        return object;
 	}
+	
+	
 	
 	
 	

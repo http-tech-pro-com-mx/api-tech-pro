@@ -23,6 +23,7 @@ public class infoAdicinalToken implements TokenEnhancer{
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
 		Usuario usuario = usuarioServiceImpl.findByUsuario(authentication.getName());
+		String badge_number = usuarioServiceImpl.findBadgeNumber(Long.valueOf(usuario.getUserid()));
 		Personal datos_personales = usuario.getPersonal();
 		
 		Map<String, Object> additionalInfo = new HashMap<>();
@@ -36,6 +37,8 @@ public class infoAdicinalToken implements TokenEnhancer{
 		additionalInfo.put("id_personal", datos_personales.getId_personal());
 		additionalInfo.put("id_perfil", datos_personales.getPerfil().getId_perfil());
 		additionalInfo.put("id_area", datos_personales.getArea().getId_area());
+		additionalInfo.put("badge_number", badge_number);
+		additionalInfo.put("id_usuario", usuario.getId_usuario());
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
 		return accessToken;
 	}

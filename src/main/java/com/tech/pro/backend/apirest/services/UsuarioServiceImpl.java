@@ -61,6 +61,13 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	public Usuario findById(Long id_usuario) {
 		return usuarioDao.findById(id_usuario).orElse(null);
 	}
+
+
+	@Override
+	@Transactional(readOnly = true)
+	public String findBadgeNumber(Long userid) {
+		return usuarioDao.findBadgeNumber(userid);
+	}
 	
 	
 	

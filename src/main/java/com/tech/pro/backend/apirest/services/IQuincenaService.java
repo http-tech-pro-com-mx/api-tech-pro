@@ -1,6 +1,7 @@
 package com.tech.pro.backend.apirest.services;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.tech.pro.backend.apirest.models.entity.Anio;
@@ -16,6 +17,6 @@ public interface IQuincenaService {
 	
 	public List<Mes> findAllMoth();
 	
-	public List<Object[]> historialQuincena(String fecha_inicio, String fecha_fin, String badgenumber);
+	public List<Object[]> reporteEntradaSalida(Long id_anio, Long id_mes, int numero_quincena, String badgenumber) throws SQLException;
 	
 }

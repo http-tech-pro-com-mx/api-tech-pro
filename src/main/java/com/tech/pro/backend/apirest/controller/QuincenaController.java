@@ -1,5 +1,6 @@
 package com.tech.pro.backend.apirest.controller;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,25 +19,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tech.pro.backend.apirest.models.entity.Quincena;
 import com.tech.pro.backend.apirest.services.IQuincenaService;
+import com.tech.pro.backend.apirest.services.QuincenaServiceImpl;
+import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;
 
 @RestController
 @RequestMapping("/api/quincena")
 public class QuincenaController {
 	
 	@Autowired
-	private IQuincenaService quincena;
+	private QuincenaServiceImpl quincenaServiceImpl;
 	
+	@Autowired
+	private UsuarioServiceImpl usuarioServiceImpl;
+	
+	@Secured({"ROLE_CONSULTA"})
 	@GetMapping("/findAll")
 	public List<Quincena> index(){
-		return quincena.findAllQuincena();
+		return quincenaServiceImpl.findAllQuincena();
 	} 
 	
+	@Secured({"ROLE_CONSULTA"})
 	@GetMapping("/findAllAnioAndMonth")
 	public  ResponseEntity<?> findAllAnioAndMonth(){
 
 		Map<String, Object> response =  new HashMap<>();
-		response.put("meses", quincena.findAllMoth());
-		response.put("anios", quincena.findAllAnio());
+		response.put("meses", quincenaServiceImpl.findAllMoth());
+		response.put("anios", quincenaServiceImpl.findAllAnio());
 		response.put("successful", true);
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
@@ -44,17 +52,21 @@ public class QuincenaController {
 	}
 	
 	@Secured({"ROLE_CONSULTA"})
-	@PostMapping(path="/historialQuincena")
-	public ResponseEntity<?> historialQuincena(@AuthenticationPrincipal String user_active, @RequestBody  Map<String,String> params){
+	@PostMapping(path="/reporteEntradaSalida")
+	public ResponseEntity<?> historialQuincena(@RequestBody  Map<String,String> params){
 		Map<String, Object> response =  new HashMap<>();
 		List<Object[]> lista = null;
-		lista = quincena.historialQuincena("2019-03-01", "2019-03-15", "3401");
-		//String anio = params.get("anio");
-		//String mes = params.get("mes");
-		//String quincena = params.get("quincena");
+		Long id_anio = Long.valueOf(params.get("anio"));
+		Long id_mes = Long.valueOf(params.get("mes"));
+		int quincena_number = Integer.valueOf(params.get("quincena"));
+		String badgenumber = params.get("badgenumber");
+		
+		lista = quincenaServiceImpl.reporteEntradaSalida(id_anio, id_mes, quincena_number, badgenumber);
+
 		response.put("procedimiento", lista);
 		
-		
+		response.put("successful", true);
+		response.put("message", "OK");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 

@@ -24,4 +24,8 @@ public interface IUsuarioDao extends JpaRepository<Usuario, Long>{
 	@Query("update Usuario u set u.contrasenia =?1 where u.id_usuario =?2")
 	public void updateContrasenia(String contrasenia, Long id_usuario);
 	
+	
+	@Query("SELECT badgenumber from v_userinfo where userid =?1")
+	public String findBadgeNumber(Long userid);
+	
 }
