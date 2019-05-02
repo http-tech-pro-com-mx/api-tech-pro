@@ -13,7 +13,7 @@ public interface IPersonalDao extends JpaRepository<Personal, Long>{
 	@Query("from Perfil")
 	public List<Perfil> findAllPerfil();
 	
-	@Query("select id_personal, CONCAT(nombre, ' ' ,apellido_paterno , ' ', ISNULL(apellido_materno,'')) from Personal")
+	@Query("select id_personal, CONCAT(nombre, ' ' ,apellido_paterno , ' ', ISNULL(apellido_materno,'')) from Personal order by nombre, apellido_paterno DESC")
 	public List<Object[]> findAllPersonal();
 	
 

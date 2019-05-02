@@ -14,18 +14,22 @@ import com.tech.pro.backend.apirest.models.entity.Mes;
 import com.tech.pro.backend.apirest.models.entity.Quincena;
 
 public interface IQuincenaDao extends JpaRepository<Quincena, Long> {
-	
+
 	@Query("from Quincena")
 	public List<Quincena> findAllQuincena();
-	
+
 	@Query("select a from Anio a")
 	public List<Anio> findAllAnio();
-	
+
 	@Query("select m from Mes m")
 	public List<Mes> findAllMoth();
-	
-	 @Procedure(name = "sp_reporteEntradaSalida")
-	 public List<Object[]> reporteEntradaSalida(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,  @Param("numero_quincena") int numero_quincena, @Param("userid") int userid) throws SQLException;
-	
-	
+
+	@Procedure(name = "sp_reporteEntradaSalida")
+	public List<Object[]> reporteEntradaSalida(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,
+			@Param("numero_quincena") int numero_quincena, @Param("userid") int userid) throws SQLException;
+
+	@Procedure(name = "sp_reporte_hora_comida")
+	public List<Object[]> reporteHoraComida(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,
+			@Param("numero_quincena") int numero_quincena, @Param("userid") int userid) throws SQLException;
+
 }

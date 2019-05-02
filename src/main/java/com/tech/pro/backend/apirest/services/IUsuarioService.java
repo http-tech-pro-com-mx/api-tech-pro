@@ -11,6 +11,8 @@ public interface IUsuarioService {
 	
 	public Usuario findByUsuario(String usuario);
 	
+	public int  findById_personal(Long id_personal);
+	
 	public void updateContrasenia(String contrasenia, Long id_usuario);
 	
 	public Usuario findById(Long id_usuario);
