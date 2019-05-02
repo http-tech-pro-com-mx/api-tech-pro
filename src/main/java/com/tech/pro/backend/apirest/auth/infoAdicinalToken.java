@@ -39,6 +39,7 @@ public class infoAdicinalToken implements TokenEnhancer{
 		additionalInfo.put("id_area", datos_personales.getArea().getId_area());
 		additionalInfo.put("badge_number", badge_number);
 		additionalInfo.put("id_usuario", usuario.getId_usuario());
+		additionalInfo.put("userid", usuario.getUserid());
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
 		return accessToken;
 	}

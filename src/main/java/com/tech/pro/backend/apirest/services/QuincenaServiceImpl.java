@@ -43,7 +43,7 @@ public class QuincenaServiceImpl implements IQuincenaService {
 
 	
 	@Override
-	public List<Object[]> reporteEntradaSalida(Long id_anio, Long id_mes, int numero_quincena, String badgenumber) {
+	public List<Object[]> reporteEntradaSalida(Long id_anio, Long id_mes, int numero_quincena, int userid) {
 		List<Object[]> object = null;
 		 try
 	        {
@@ -51,9 +51,9 @@ public class QuincenaServiceImpl implements IQuincenaService {
 	                    .registerStoredProcedureParameter(0 , Long.class , ParameterMode.IN)
 	                    .registerStoredProcedureParameter(1 , Long.class, ParameterMode.IN)
 	                    .registerStoredProcedureParameter(2 , Integer.class, ParameterMode.IN)
-	                    .registerStoredProcedureParameter(3 , String.class, ParameterMode.IN);
+	                    .registerStoredProcedureParameter(3 , Integer.class, ParameterMode.IN);
 	             
-	            storedProcedure.setParameter(0, id_anio).setParameter(1, id_mes).setParameter(2, numero_quincena).setParameter(3, badgenumber);
+	            storedProcedure.setParameter(0, id_anio).setParameter(1, id_mes).setParameter(2, numero_quincena).setParameter(3, userid);
 	             
 	            storedProcedure.execute();
 	            

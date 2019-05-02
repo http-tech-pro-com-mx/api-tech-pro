@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tech.pro.backend.apirest.models.entity.Quincena;
 import com.tech.pro.backend.apirest.services.IQuincenaService;
+import com.tech.pro.backend.apirest.services.PersonalServiceImpl;
 import com.tech.pro.backend.apirest.services.QuincenaServiceImpl;
 import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;
 
@@ -31,6 +32,9 @@ public class QuincenaController {
 	
 	@Autowired
 	private UsuarioServiceImpl usuarioServiceImpl;
+	
+	@Autowired
+	private PersonalServiceImpl personalServiceImpl;  
 	
 	@Secured({"ROLE_CONSULTA"})
 	@GetMapping("/findAll")
@@ -51,6 +55,20 @@ public class QuincenaController {
 		
 	}
 	
+	@Secured({"ROLE_CONSULTA_ADMIN"})
+	@GetMapping("/findAllAnioAndMonthAndEmpleado")
+	public  ResponseEntity<?> findAllPersonal(){
+
+		Map<String, Object> response =  new HashMap<>();
+		response.put("meses", quincenaServiceImpl.findAllMoth());
+		response.put("anios", quincenaServiceImpl.findAllAnio());
+		response.put("empleados", personalServiceImpl.findAllPersonal());
+		response.put("successful", true);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		
+	}
+	
 	@Secured({"ROLE_CONSULTA"})
 	@PostMapping(path="/reporteEntradaSalida")
 	public ResponseEntity<?> historialQuincena(@RequestBody  Map<String,String> params){
@@ -59,9 +77,9 @@ public class QuincenaController {
 		Long id_anio = Long.valueOf(params.get("anio"));
 		Long id_mes = Long.valueOf(params.get("mes"));
 		int quincena_number = Integer.valueOf(params.get("quincena"));
-		String badgenumber = params.get("badgenumber");
+		int userid = Integer.valueOf(params.get("userid"));
 		
-		lista = quincenaServiceImpl.reporteEntradaSalida(id_anio, id_mes, quincena_number, badgenumber);
+		lista = quincenaServiceImpl.reporteEntradaSalida(id_anio, id_mes, quincena_number, userid);
 
 		response.put("procedimiento", lista);
 		

@@ -13,4 +13,6 @@ public interface IPersonalService {
 	public Personal save(Personal personal);
 	
 	public Personal findById(Long id_personal);
+	
+	public List<Object[]> findAllPersonal();
 }

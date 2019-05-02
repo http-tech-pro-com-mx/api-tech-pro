@@ -25,7 +25,7 @@ public interface IQuincenaDao extends JpaRepository<Quincena, Long> {
 	public List<Mes> findAllMoth();
 	
 	 @Procedure(name = "sp_reporteEntradaSalida")
-	 public List<Object[]> reporteEntradaSalida(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,  @Param("numero_quincena") int numero_quincena, @Param("badgenumber") String badgenumber) throws SQLException;
+	 public List<Object[]> reporteEntradaSalida(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,  @Param("numero_quincena") int numero_quincena, @Param("userid") int userid) throws SQLException;
 	
 	
 }

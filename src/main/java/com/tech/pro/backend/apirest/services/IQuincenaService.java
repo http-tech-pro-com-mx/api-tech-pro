@@ -17,6 +17,6 @@ public interface IQuincenaService {
 	
 	public List<Mes> findAllMoth();
 	
-	public List<Object[]> reporteEntradaSalida(Long id_anio, Long id_mes, int numero_quincena, String badgenumber) throws SQLException;
+	public List<Object[]> reporteEntradaSalida(Long id_anio, Long id_mes, int numero_quincena, int userid) throws SQLException;
 	
 }

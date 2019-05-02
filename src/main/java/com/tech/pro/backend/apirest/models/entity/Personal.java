@@ -36,7 +36,6 @@ public class Personal implements Serializable {
 	@Size(max =60)
 	private String apellido_paterno;
 	
-	@NotEmpty(message="El apellido materno no puede estar vacío")
 	@Size(max =60)
 	private String apellido_materno;
 	

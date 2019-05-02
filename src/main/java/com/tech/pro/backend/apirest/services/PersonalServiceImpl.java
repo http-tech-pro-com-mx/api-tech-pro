@@ -38,6 +38,13 @@ public class PersonalServiceImpl implements IPersonalService{
 	public Personal findById(Long id_personal) {
 		return personalDao.findById(id_personal).orElse(null);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Object[]> findAllPersonal() {
+		return personalDao.findAllPersonal();
+	}
+	
 	
 	
 
