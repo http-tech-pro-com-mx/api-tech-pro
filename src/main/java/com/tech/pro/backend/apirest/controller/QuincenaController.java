@@ -36,10 +36,14 @@ public class QuincenaController {
 	@Autowired
 	private PersonalServiceImpl personalServiceImpl;
 
-	@Secured({ "ROLE_CONSULTA" })
+	@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@GetMapping("/findAll")
-	public List<Quincena> index() {
-		return quincenaServiceImpl.findAllQuincena();
+	public ResponseEntity<?> index() {
+		Map<String, Object> response = new HashMap<>();
+		response.put("quincenas", quincenaServiceImpl.findAllQuincena());
+		response.put("successful", true);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		
 	}
 
 	@Secured({ "ROLE_CONSULTA" })
