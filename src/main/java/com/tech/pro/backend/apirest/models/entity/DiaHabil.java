@@ -41,10 +41,10 @@ public class DiaHabil implements Serializable{
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Quincena id_quincena;
 	
-	private Long id_usuario_regitro;
+	private Long id_usuario_registro;
 	
 	@Temporal(TemporalType.DATE)
-	private Date fecha_regitro;
+	private Date fecha_registro;
 	
 	private Long id_usuario_modifica_registro;
 	
@@ -52,7 +52,7 @@ public class DiaHabil implements Serializable{
 	
 	@PrePersist
 	public void prePersist() {
-		fecha_regitro  = new Date();
+		fecha_registro  = new Date();
 	}
 	
 	public Long getId_dia_habil() {
@@ -79,20 +79,20 @@ public class DiaHabil implements Serializable{
 		this.id_quincena = id_quincena;
 	}
 	
-	public Long getId_usuario_regitro() {
-		return id_usuario_regitro;
+	public Long getId_usuario_registro() {
+		return id_usuario_registro;
 	}
 	
-	public void setId_usuario_regitro(Long id_usuario_regitro) {
-		this.id_usuario_regitro = id_usuario_regitro;
+	public void setId_usuario_registro(Long id_usuario_registro) {
+		this.id_usuario_registro = id_usuario_registro;
 	}
 	
-	public Date getFecha_regitro() {
-		return fecha_regitro;
+	public Date getFecha_registro() {
+		return fecha_registro;
 	}
 	
-	public void setFecha_regitro(Date fecha_regitro) {
-		this.fecha_regitro = fecha_regitro;
+	public void setFecha_registro(Date fecha_regitro) {
+		this.fecha_registro = fecha_regitro;
 	}
 	
 	public Long getId_usuario_modifica_registro() {
