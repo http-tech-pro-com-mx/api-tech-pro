@@ -32,5 +32,6 @@ public interface IQuincenaDao extends JpaRepository<Quincena, Long> {
 	public List<Object[]> reporteHoraComida(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,
 			@Param("numero_quincena") int numero_quincena, @Param("userid") int userid) throws SQLException;
 	
-	//public Quincena findById_mesAndId_anioAndNumero_quincena(Long id_mes, Long id_anio, Long numero_quincena);
+	@Query("select count(q) from Quincena q where q.id_mes.id_mes =?1 and q.id_anio.id_anio =?2  and q.numero_quincena =?3")
+	public int findQuincenaByMesAndAnioAndNumberQ(Long id_mes, Long id_anio, Long numero_quincena);
 }

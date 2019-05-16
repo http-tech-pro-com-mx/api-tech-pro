@@ -23,5 +23,5 @@ public interface IQuincenaService {
 	
 	public Quincena save(Quincena quincena);
 	
-	//public Quincena findById_mesAndId_anioAndNumero_quincena(Long id_mes, Long id_anio, Long numero_quincena);
+	public int findQuincenaByMesAndAnioAndNumberQ(Long id_mes, Long id_anio, Long numero_quincena);
 }

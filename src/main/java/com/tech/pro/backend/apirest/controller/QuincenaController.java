@@ -160,9 +160,17 @@ public class QuincenaController {
 		quincena.setId_usuario_registro(user.getId_usuario());
 		try {
 			
-			quincenaServiceImpl.save(quincena);
-			response.put("successful", true);
-			response.put("message", "Registro correcto");
+			int count_regitros = quincenaServiceImpl.findQuincenaByMesAndAnioAndNumberQ(quincena.getId_mes().getId_mes(), quincena.getId_anio().getId_anio(), quincena.getNumero_quincena());
+			
+			if(count_regitros == 0) {
+				quincenaServiceImpl.save(quincena);
+				response.put("successful", true);
+				response.put("message", "Registro correcto");
+			}else {
+				response.put("successful", false);
+				response.put("message", "Ya se registro: ");
+			}
+		
 		}catch (Exception e) {
 			response.put("successful", false);
 			response.put("message", e.getMessage().toString());
