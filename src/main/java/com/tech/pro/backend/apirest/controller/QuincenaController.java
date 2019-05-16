@@ -1,9 +1,12 @@
 package com.tech.pro.backend.apirest.controller;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tech.pro.backend.apirest.models.entity.DiaHabil;
 import com.tech.pro.backend.apirest.models.entity.Quincena;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.IQuincenaService;
@@ -40,6 +47,8 @@ public class QuincenaController {
 	@GetMapping("/findAll")
 	public ResponseEntity<?> index() {
 		Map<String, Object> response = new HashMap<>();
+		response.put("meses", quincenaServiceImpl.findAllMoth());
+		response.put("anios", quincenaServiceImpl.findAllAnio());
 		response.put("quincenas", quincenaServiceImpl.findAllQuincena());
 		response.put("successful", true);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
@@ -135,6 +144,34 @@ public class QuincenaController {
 
 		response.put("successful", true);
 		response.put("message", "OK");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	@Secured({ "ROLE_CREATE_QUINCENA" })
+	@PostMapping(path = "/create-quincena")
+	public  ResponseEntity<?> create(@AuthenticationPrincipal String user_active,@RequestBody Map<Object, Object> params){
+		Map<String, Object> response = new HashMap<>();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Usuario user = usuarioServiceImpl.findByUsuario(user_active);
+		
+		Quincena quincena;
+		quincena = mapper.convertValue(params.get("quincena"), Quincena.class);
+		quincena.setId_usuario_registro(user.getId_usuario());
+		try {
+			
+			quincenaServiceImpl.save(quincena);
+			response.put("successful", true);
+			response.put("message", "Registro correcto");
+		}catch (Exception e) {
+			response.put("successful", false);
+			response.put("message", e.getMessage().toString());
+		}
+		
+		
+
+		//List<DiaHabil> dias_habiles = (List<DiaHabil>)params.get("dias_habiles");
+
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 

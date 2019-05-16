@@ -102,4 +102,18 @@ public class QuincenaServiceImpl implements IQuincenaService {
 		return object;
 	}
 
+	@Override
+	@Transactional
+	public Quincena save(Quincena quincena) {
+		return iQuincenaDao.save(quincena);
+	}
+
+	/*@Override
+	@Transactional(readOnly = true)
+	public Quincena findById_mesAndId_anioAndNumero_quincena(Long id_mes, Long id_anio, Long numero_quincena) {
+		return iQuincenaDao.findById_mesAndId_anioAndNumero_quincena(id_mes, id_anio, numero_quincena);
+	}*/
+	
+	
+
 }

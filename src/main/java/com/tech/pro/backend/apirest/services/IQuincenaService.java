@@ -20,4 +20,8 @@ public interface IQuincenaService {
 	public List<Object[]> reporteEntradaSalida(Long id_anio, Long id_mes, int numero_quincena, int userid) throws SQLException;
 	
 	public List<Object[]> reporteHoraComida(Long id_anio, Long id_mes, int numero_quincena, int userid) throws SQLException;
+	
+	public Quincena save(Quincena quincena);
+	
+	//public Quincena findById_mesAndId_anioAndNumero_quincena(Long id_mes, Long id_anio, Long numero_quincena);
 }

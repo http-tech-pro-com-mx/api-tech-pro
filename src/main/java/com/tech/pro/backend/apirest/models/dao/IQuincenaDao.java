@@ -31,5 +31,6 @@ public interface IQuincenaDao extends JpaRepository<Quincena, Long> {
 	@Procedure(name = "sp_reporte_hora_comida")
 	public List<Object[]> reporteHoraComida(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,
 			@Param("numero_quincena") int numero_quincena, @Param("userid") int userid) throws SQLException;
-
+	
+	//public Quincena findById_mesAndId_anioAndNumero_quincena(Long id_mes, Long id_anio, Long numero_quincena);
 }
