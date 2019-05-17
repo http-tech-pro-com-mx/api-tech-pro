@@ -52,7 +52,7 @@ public class QuincenaController {
 		response.put("quincenas", quincenaServiceImpl.findAllQuincena());
 		response.put("successful", true);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
-		
+
 	}
 
 	@Secured({ "ROLE_CONSULTA" })
@@ -94,15 +94,15 @@ public class QuincenaController {
 		Long id_personal = Long.valueOf(params.get("id_personal"));
 
 		int userid = -1;
-		
+
 		try {
 			userid = usuarioServiceImpl.findById_personal(id_personal);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			response.put("successful", false);
 			response.put("message", "No se encuentra usuario");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
-			
+
 		lista_entrada_salida = quincenaServiceImpl.reporteEntradaSalida(id_anio, id_mes, quincena_number, userid);
 		try {
 			lista_hora_comida = quincenaServiceImpl.reporteHoraComida(id_anio, id_mes, quincena_number, userid);
@@ -116,7 +116,6 @@ public class QuincenaController {
 		response.put("successful", true);
 		response.put("message", "OK");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
-
 
 	}
 
@@ -146,39 +145,44 @@ public class QuincenaController {
 		response.put("message", "OK");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-	
+
 	@Secured({ "ROLE_CREATE_QUINCENA" })
 	@PostMapping(path = "/create-quincena")
-	public  ResponseEntity<?> create(@AuthenticationPrincipal String user_active,@RequestBody Map<Object, Object> params){
+	public ResponseEntity<?> create(@AuthenticationPrincipal String user_active,
+			@RequestBody Map<Object, Object> params) {
 		Map<String, Object> response = new HashMap<>();
 		ObjectMapper mapper = new ObjectMapper();
-		
+
 		Usuario user = usuarioServiceImpl.findByUsuario(user_active);
-		
+
 		Quincena quincena;
 		quincena = mapper.convertValue(params.get("quincena"), Quincena.class);
 		quincena.setId_usuario_registro(user.getId_usuario());
 		try {
-			
-			int count_regitros = quincenaServiceImpl.findQuincenaByMesAndAnioAndNumberQ(quincena.getId_mes().getId_mes(), quincena.getId_anio().getId_anio(), quincena.getNumero_quincena());
-			
-			if(count_regitros == 0) {
-				quincenaServiceImpl.save(quincena);
+
+			int count_regitros = quincenaServiceImpl.findQuincenaByMesAndAnioAndNumberQ(
+					quincena.getId_mes().getId_mes(), quincena.getId_anio().getId_anio(),
+					quincena.getNumero_quincena());
+
+			if (count_regitros == 0) {
+				Quincena quincena_create = quincenaServiceImpl.save(quincena);
+				List<DiaHabil> dias_habiles = mapper.convertValue(params.get("dias_habiles"), mapper.getTypeFactory().constructCollectionType(List.class, DiaHabil.class));
+				dias_habiles.stream().forEach(dia -> {
+					dia.setId_quincena(quincena_create);
+					dia.setId_usuario_registro(user.getId_usuario());
+				});
 				response.put("successful", true);
 				response.put("message", "Registro correcto");
-			}else {
+				response.put("dias_ok", dias_habiles);
+			} else {
 				response.put("successful", false);
-				response.put("message", "Ya se registro: ");
+				response.put("message", "Ya ha sido registrada otra quincena con el mismo nombre.");
 			}
-		
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			response.put("successful", false);
 			response.put("message", e.getMessage().toString());
 		}
-		
-		
-
-		//List<DiaHabil> dias_habiles = (List<DiaHabil>)params.get("dias_habiles");
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
