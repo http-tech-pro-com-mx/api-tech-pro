@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.pro.backend.apirest.models.entity.DiaHabil;
 import com.tech.pro.backend.apirest.models.entity.Quincena;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
+import com.tech.pro.backend.apirest.services.DiaHabilServiceImpl;
 import com.tech.pro.backend.apirest.services.IQuincenaService;
 import com.tech.pro.backend.apirest.services.PersonalServiceImpl;
 import com.tech.pro.backend.apirest.services.QuincenaServiceImpl;
@@ -42,6 +43,9 @@ public class QuincenaController {
 
 	@Autowired
 	private PersonalServiceImpl personalServiceImpl;
+	
+	@Autowired
+	private DiaHabilServiceImpl diaHabilServiceImpl;
 
 	@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@GetMapping("/findAll")
@@ -163,17 +167,43 @@ public class QuincenaController {
 			int count_regitros = quincenaServiceImpl.findQuincenaByMesAndAnioAndNumberQ(
 					quincena.getId_mes().getId_mes(), quincena.getId_anio().getId_anio(),
 					quincena.getNumero_quincena());
+			List<DiaHabil> dias_habiles = mapper.convertValue(params.get("dias_habiles"), mapper.getTypeFactory().constructCollectionType(List.class, DiaHabil.class));
 
 			if (count_regitros == 0) {
-				Quincena quincena_create = quincenaServiceImpl.save(quincena);
-				List<DiaHabil> dias_habiles = mapper.convertValue(params.get("dias_habiles"), mapper.getTypeFactory().constructCollectionType(List.class, DiaHabil.class));
-				dias_habiles.stream().forEach(dia -> {
-					dia.setId_quincena(quincena_create);
-					dia.setId_usuario_registro(user.getId_usuario());
-				});
-				response.put("successful", true);
-				response.put("message", "Registro correcto");
-				response.put("dias_ok", dias_habiles);
+				DiaHabil dia_duplicado = null;
+				if(!dias_habiles.isEmpty()) {
+					
+					boolean days_ok = true;
+					
+					for(DiaHabil dia: dias_habiles) {
+						if(diaHabilServiceImpl.existsByFecha(dia.getFecha())) {
+							dia_duplicado = dia;	
+						  days_ok = false;	
+						} break;
+					}
+					
+					if(days_ok) {
+						Quincena quincena_create = quincenaServiceImpl.save(quincena);
+						
+						dias_habiles.stream().forEach(dia -> {
+							dia.setId_quincena(quincena_create);
+							dia.setId_usuario_registro(user.getId_usuario());
+						});
+						
+						diaHabilServiceImpl.saveAll(dias_habiles);
+						response.put("quincena", quincena_create);
+						response.put("successful", true);
+						response.put("message", "Registro correcto");
+					}else{
+						response.put("successful", false);
+						response.put("message", "Día: "+ dia_duplicado.getFecha() + " ya esta registrado en otra quincena");
+					}
+	
+				}else {
+					response.put("successful", false);
+					response.put("message", "Se necesitan días hábiles");
+				}
+
 			} else {
 				response.put("successful", false);
 				response.put("message", "Ya ha sido registrada otra quincena con el mismo nombre.");
