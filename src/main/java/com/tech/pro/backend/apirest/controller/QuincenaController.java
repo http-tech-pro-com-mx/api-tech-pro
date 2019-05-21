@@ -1,10 +1,13 @@
 package com.tech.pro.backend.apirest.controller;
 
 import java.io.IOException;
+
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -43,7 +46,7 @@ public class QuincenaController {
 
 	@Autowired
 	private PersonalServiceImpl personalServiceImpl;
-	
+
 	@Autowired
 	private DiaHabilServiceImpl diaHabilServiceImpl;
 
@@ -167,39 +170,167 @@ public class QuincenaController {
 			int count_regitros = quincenaServiceImpl.findQuincenaByMesAndAnioAndNumberQ(
 					quincena.getId_mes().getId_mes(), quincena.getId_anio().getId_anio(),
 					quincena.getNumero_quincena());
-			List<DiaHabil> dias_habiles = mapper.convertValue(params.get("dias_habiles"), mapper.getTypeFactory().constructCollectionType(List.class, DiaHabil.class));
+			List<DiaHabil> dias_habiles = mapper.convertValue(params.get("dias_habiles"),
+					mapper.getTypeFactory().constructCollectionType(List.class, DiaHabil.class));
 
 			if (count_regitros == 0) {
 				DiaHabil dia_duplicado = null;
-				if(!dias_habiles.isEmpty()) {
-					
+				if (!dias_habiles.isEmpty()) {
+
 					boolean days_ok = true;
-					
-					for(DiaHabil dia: dias_habiles) {
-						if(diaHabilServiceImpl.existsByFecha(dia.getFecha())) {
-							dia_duplicado = dia;	
-						  days_ok = false;	
-						} break;
+
+					for (DiaHabil dia : dias_habiles) {
+						if (diaHabilServiceImpl.existsByFecha(dia.getFecha())) {
+							dia_duplicado = dia;
+							days_ok = false;
+							break;
+						}
 					}
-					
-					if(days_ok) {
+
+					if (days_ok) {
 						Quincena quincena_create = quincenaServiceImpl.save(quincena);
-						
+
 						dias_habiles.stream().forEach(dia -> {
 							dia.setId_quincena(quincena_create);
 							dia.setId_usuario_registro(user.getId_usuario());
 						});
-						
+
 						diaHabilServiceImpl.saveAll(dias_habiles);
 						response.put("quincena", quincena_create);
 						response.put("successful", true);
 						response.put("message", "Registro correcto");
-					}else{
+					} else {
 						response.put("successful", false);
-						response.put("message", "Día: "+ dia_duplicado.getFecha() + " ya esta registrado en otra quincena");
+						response.put("message",
+								"Día: " + dia_duplicado.getFecha() + " ya esta registrado en otra quincena");
 					}
-	
-				}else {
+
+				} else {
+					response.put("successful", false);
+					response.put("message", "Se necesitan días hábiles");
+				}
+
+			} else {
+				response.put("successful", false);
+				response.put("message", "Ya ha sido registrada otra quincena con el mismo nombre.");
+			}
+
+		} catch (Exception e) {
+			response.put("successful", false);
+			response.put("message", e.getMessage().toString());
+		}
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+
+	@PostMapping(path = "/update-quincena")
+	public ResponseEntity<?> update(@AuthenticationPrincipal String user_active,
+			@RequestBody Map<Object, Object> params) {
+		Map<String, Object> response = new HashMap<>();
+		ObjectMapper mapper = new ObjectMapper();
+
+		Usuario user = usuarioServiceImpl.findByUsuario(user_active);
+
+		Quincena quincena;
+		quincena = mapper.convertValue(params.get("quincena"), Quincena.class);
+		quincena.setId_usuario_modifica_registro((user.getId_usuario()));
+
+		try {
+
+			int count_regitros = quincenaServiceImpl.findQuincenaByMesAndAnioAndNQId(quincena.getId_mes().getId_mes(),
+					quincena.getId_anio().getId_anio(), quincena.getNumero_quincena(), quincena.getId_quincena());
+			List<DiaHabil> dias_habiles_req = mapper.convertValue(params.get("dias_habiles"),
+					mapper.getTypeFactory().constructCollectionType(List.class, DiaHabil.class));
+
+			if (count_regitros == 0) {
+				DiaHabil dia_duplicado = null;
+				if (!dias_habiles_req.isEmpty()) {
+
+					boolean days_ok = true;
+
+					for (DiaHabil dia : dias_habiles_req) {
+						if (diaHabilServiceImpl.existsByFechaUpdate(dia.getFecha(),
+								dia.getId_quincena().getId_quincena())) {
+							dia_duplicado = dia;
+							days_ok = false;
+							break;
+						}
+					}
+
+					if (days_ok) {
+						Quincena quincena_update = quincenaServiceImpl.save(quincena);
+						List<DiaHabil> dias_on_bd = diaHabilServiceImpl.findById_quincena(quincena.getId_quincena());
+
+						dias_on_bd.stream().forEach(dia -> {
+							Optional<DiaHabil> resultado = dias_habiles_req.stream().filter(dia_req -> {
+								if (dia_req.getFecha().equals(dia.getFecha())) {
+									dia_req.setId_dia_habil(dia.getId_dia_habil());
+									dia_req.setFecha_registro(dia.getFecha_registro());
+									dia_req.setId_usuario_registro(dia.getId_usuario_registro());
+									dia_req.setId_usuario_modifica_registro(dia.getId_usuario_modifica_registro());
+									return true;
+								} else {
+									return false;
+								}
+							}).findFirst();
+							if (!resultado.isPresent()) {
+								// ingresar usuario modifica
+								// Update registro estatus a 0
+
+								dia.setId_quincena(null);
+								dia.setEstatus(0);
+								dia.setFecha_modifica_registro(new Date());
+								dia.setId_usuario_modifica_registro(user.getId_usuario());
+								diaHabilServiceImpl.save(dia);
+							}
+						});
+
+						dias_habiles_req.stream().forEach(dia -> {
+							Optional<DiaHabil> resultado = dias_on_bd.stream()
+									.filter(dia_bd -> dia_bd.getFecha().equals(dia.getFecha())).findFirst();
+							if (!resultado.isPresent()) {
+								// ingresar usuario modifica
+								// Inserta el nuevo dato
+								DiaHabil dia_habil_disabled = diaHabilServiceImpl.existsByFechaDisabled(dia.getFecha());
+								if(dia_habil_disabled != null) {
+									dia_habil_disabled.setEstatus(1);
+									dia_habil_disabled.setId_quincena(quincena_update);
+									dia_habil_disabled.setId_usuario_modifica_registro(user.getId_usuario());
+									dia_habil_disabled.setFecha_modifica_registro(new Date());
+									diaHabilServiceImpl.save(dia_habil_disabled);
+								}else {
+									dia.setId_quincena(quincena_update);
+									dia.setId_usuario_registro(user.getId_usuario());
+									diaHabilServiceImpl.save(dia);
+								}
+							
+							} else {
+								// ingresar id_usuario_crear
+								// Actualiza los datos
+								dia.setFecha_modifica_registro(new Date());
+								dia.setId_quincena(quincena_update);
+								dia.setId_usuario_modifica_registro(user.getId_usuario());
+								diaHabilServiceImpl.save(dia);
+
+							}
+						});
+//						
+//
+//						dias_habiles.stream().forEach(dia -> {
+//							dia.setId_usuario_registro(user.getId_usuario());
+//						});
+//
+//						diaHabilServiceImpl.saveAll(dias_habiles);
+//						response.put("quincena", quincena_create);
+						response.put("successful", true);
+						response.put("message", "Actualización correcta");
+					} else {
+						response.put("successful", false);
+						response.put("message",
+								"Día: " + dia_duplicado.getFecha() + " ya esta registrado en otra quincena");
+					}
+
+				} else {
 					response.put("successful", false);
 					response.put("message", "Se necesitan días hábiles");
 				}

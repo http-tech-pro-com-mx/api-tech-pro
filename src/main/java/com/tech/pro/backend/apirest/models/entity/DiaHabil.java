@@ -50,6 +50,8 @@ public class DiaHabil implements Serializable{
 	
 	private Date fecha_modifica_registro;
 	
+	private int estatus;
+	
 	@PrePersist
 	public void prePersist() {
 		fecha_registro  = new Date();
@@ -110,5 +112,14 @@ public class DiaHabil implements Serializable{
 	public void setFecha_modifica_registro(Date fecha_modifica_registro) {
 		this.fecha_modifica_registro = fecha_modifica_registro;
 	}
+
+	public int getEstatus() {
+		return estatus;
+	}
+
+	public void setEstatus(int estatus) {
+		this.estatus = estatus;
+	}
+	
 	
 }

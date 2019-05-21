@@ -1,6 +1,6 @@
 package com.tech.pro.backend.apirest.models.dao;
 
-import java.sql.Date;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -34,4 +34,7 @@ public interface IQuincenaDao extends JpaRepository<Quincena, Long> {
 	
 	@Query("select count(q) from Quincena q where q.id_mes.id_mes =?1 and q.id_anio.id_anio =?2  and q.numero_quincena =?3")
 	public int findQuincenaByMesAndAnioAndNumberQ(Long id_mes, Long id_anio, Long numero_quincena);
+	
+	@Query("select count(q) from Quincena q where q.id_mes.id_mes =?1 and q.id_anio.id_anio =?2  and q.numero_quincena =?3 and q.id_quincena !=?4")
+	public int findQuincenaByMesAndAnioAndNQId(Long id_mes, Long id_anio, Long numero_quincena, Long id_quincena);
 }

@@ -2,6 +2,7 @@ package com.tech.pro.backend.apirest.services;
 
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import com.tech.pro.backend.apirest.models.entity.Anio;
@@ -24,4 +25,7 @@ public interface IQuincenaService {
 	public Quincena save(Quincena quincena);
 	
 	public int findQuincenaByMesAndAnioAndNumberQ(Long id_mes, Long id_anio, Long numero_quincena);
+	
+	public int findQuincenaByMesAndAnioAndNQId(Long id_mes, Long id_anio, Long numero_quincena, Long id_quincena);
+	
 }

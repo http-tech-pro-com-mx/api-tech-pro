@@ -45,6 +45,38 @@ public class DiaHabilServiceImpl implements IDiaHabilService {
 	public boolean existsByFecha(Date fecha) {
 		return iDiaHabilDao.existsByFecha(fecha);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public boolean existsByFechaUpdate(Date fecha, Long id_quincena) {
+		return iDiaHabilDao.existsByFechaUpdate(fecha, id_quincena);
+	}
+
+	@Override
+	@Transactional
+	public DiaHabil save(DiaHabil diaHabil) {
+		return iDiaHabilDao.save(diaHabil);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public DiaHabil existsByFechaDisabled(Date fecha) {		
+		return iDiaHabilDao.existsByFechaDisabled(fecha);
+	}
+	
+	
+
+//	@Override
+//	@Transactional
+//	public void disabledDiaHabil(Long id_dia_habil) {
+//		iDiaHabilDao.disabledDiaHabil(id_dia_habil);
+//	}
+	
+	
+	
+	
+	
+	
 	
 	
 	

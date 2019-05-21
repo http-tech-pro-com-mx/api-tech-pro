@@ -12,5 +12,11 @@ public interface IDiaHabilService {
 	public List<DiaHabil> saveAll(List<DiaHabil> entities);
 	
 	public boolean existsByFecha(Date fecha);  
-
+	
+	public boolean existsByFechaUpdate(Date fecha, Long id_quincena); 
+	
+	public DiaHabil save(DiaHabil diaHabil); 
+	
+	public DiaHabil existsByFechaDisabled(Date fecha); 
+//	public void disabledDiaHabil(Long id_dia_habil);
 }

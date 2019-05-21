@@ -1,6 +1,7 @@
 package com.tech.pro.backend.apirest.services;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -114,11 +115,11 @@ public class QuincenaServiceImpl implements IQuincenaService {
 		return iQuincenaDao.findQuincenaByMesAndAnioAndNumberQ(id_mes, id_anio, numero_quincena);
 	}
 
-	
-	
-	
-	
-	
-	
+	@Override
+	@Transactional(readOnly = true)
+	public int findQuincenaByMesAndAnioAndNQId(Long id_mes, Long id_anio, Long numero_quincena, Long id_quincena) {
+		return iQuincenaDao.findQuincenaByMesAndAnioAndNQId(id_mes, id_anio, numero_quincena, id_quincena);
+	}
+
 
 }
