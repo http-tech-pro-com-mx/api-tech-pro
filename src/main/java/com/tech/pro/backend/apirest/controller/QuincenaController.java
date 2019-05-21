@@ -314,14 +314,8 @@ public class QuincenaController {
 
 							}
 						});
-//						
-//
-//						dias_habiles.stream().forEach(dia -> {
-//							dia.setId_usuario_registro(user.getId_usuario());
-//						});
-//
-//						diaHabilServiceImpl.saveAll(dias_habiles);
-//						response.put("quincena", quincena_create);
+						
+						response.put("quincena_update", quincena_update);
 						response.put("successful", true);
 						response.put("message", "Actualización correcta");
 					} else {
