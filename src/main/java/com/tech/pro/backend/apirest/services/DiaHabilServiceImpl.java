@@ -63,22 +63,11 @@ public class DiaHabilServiceImpl implements IDiaHabilService {
 	public DiaHabil existsByFechaDisabled(Date fecha) {		
 		return iDiaHabilDao.existsByFechaDisabled(fecha);
 	}
-	
-	
 
-//	@Override
-//	@Transactional
-//	public void disabledDiaHabil(Long id_dia_habil) {
-//		iDiaHabilDao.disabledDiaHabil(id_dia_habil);
-//	}
-	
-	
-	
-	
-	
-	
-	
-	
+	@Override
+	public List<DiaHabil> findAll() {
+		return iDiaHabilDao.findAll();
+	}
 	
 	
 	

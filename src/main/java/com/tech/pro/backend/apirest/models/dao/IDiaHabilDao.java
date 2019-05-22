@@ -21,6 +21,5 @@ public interface IDiaHabilDao extends JpaRepository<DiaHabil, Long>{
 	
 	@Query("from DiaHabil d where d.fecha=?1 and d.estatus=0")
 	public DiaHabil existsByFechaDisabled(Date fecha); 
-//	@Query("update DiaHabil d set d.estatus=0 where d.id_dia_habil=?1")
-//	public void disabledDiaHabil(Long id_dia_habil);
+
 }

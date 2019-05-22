@@ -18,5 +18,6 @@ public interface IDiaHabilService {
 	public DiaHabil save(DiaHabil diaHabil); 
 	
 	public DiaHabil existsByFechaDisabled(Date fecha); 
-//	public void disabledDiaHabil(Long id_dia_habil);
+	
+	public List<DiaHabil> findAll();
 }
