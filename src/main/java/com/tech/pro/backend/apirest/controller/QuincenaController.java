@@ -1,6 +1,6 @@
 package com.tech.pro.backend.apirest.controller;
 
-import java.io.IOException;
+
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.validation.Valid;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,14 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.pro.backend.apirest.models.entity.DiaHabil;
 import com.tech.pro.backend.apirest.models.entity.Quincena;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.DiaHabilServiceImpl;
-import com.tech.pro.backend.apirest.services.IQuincenaService;
 import com.tech.pro.backend.apirest.services.PersonalServiceImpl;
 import com.tech.pro.backend.apirest.services.QuincenaServiceImpl;
 import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;

@@ -32,4 +32,15 @@ public class DiaHabilController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
+	@Secured({ "ROLE_CONSULTA" })
+	@GetMapping("/findAll")
+	public ResponseEntity<?> findAllDays(){
+		Map<String, Object> response = new HashMap<>();
+		List<DiaHabil> lista_dias = diaHabilServiceImpl.findAll();
+		response.put("successful", true);
+		response.put("dias_habiles", lista_dias );
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	
 }

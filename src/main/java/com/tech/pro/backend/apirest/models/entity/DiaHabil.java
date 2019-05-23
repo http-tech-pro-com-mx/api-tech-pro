@@ -2,7 +2,10 @@ package com.tech.pro.backend.apirest.models.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -17,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -42,6 +47,12 @@ public class DiaHabil implements Serializable{
 	private Quincena id_quincena;
 	
 	private Long id_usuario_registro;
+	
+	@ManyToMany(cascade=CascadeType.ALL, mappedBy="id_dia_habil")
+//	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	@JsonBackReference
+	private Set<Justificacion> justificaciones;
+	
 	
 	@Temporal(TemporalType.DATE)
 	private Date fecha_registro;
@@ -120,6 +131,17 @@ public class DiaHabil implements Serializable{
 	public void setEstatus(int estatus) {
 		this.estatus = estatus;
 	}
+
+	
+	public Set<Justificacion> getJustificaciones() {
+		return justificaciones;
+	}
+
+	public void setJustificaciones(Set<Justificacion> justificaciones) {
+		this.justificaciones = justificaciones;
+	}
 	
 	
+
+
 }
