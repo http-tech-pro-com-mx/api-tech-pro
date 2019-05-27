@@ -24,6 +24,13 @@ public class JustificacionServiceImpl implements IJustificacionService {
 	public Justificacion findById(Long id_justificacion) {
 		return iJustificacionDao.findById(id_justificacion).orElse(null);
 	}
+
+	@Override
+	public Justificacion save(Justificacion justificacion) {
+		return iJustificacionDao.save(justificacion);
+	}
+	
+	
 	
 	
 

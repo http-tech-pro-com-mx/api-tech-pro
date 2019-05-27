@@ -9,4 +9,6 @@ public interface IJustificacionService {
 	public List<Justificacion> findAll();
 	
 	public Justificacion findById(Long id_justificacion);
+	
+	public Justificacion save(Justificacion justificacion);
 }

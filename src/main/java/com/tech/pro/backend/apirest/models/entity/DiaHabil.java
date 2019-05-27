@@ -48,10 +48,10 @@ public class DiaHabil implements Serializable{
 	
 	private Long id_usuario_registro;
 	
-	@ManyToMany(cascade=CascadeType.ALL, mappedBy="id_dia_habil")
-//	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	@ManyToMany(cascade=CascadeType.ALL, mappedBy="dias")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	@JsonBackReference
-	private Set<Justificacion> justificaciones;
+	private List<Justificacion> justificaciones;
 	
 	
 	@Temporal(TemporalType.DATE)
@@ -132,16 +132,14 @@ public class DiaHabil implements Serializable{
 		this.estatus = estatus;
 	}
 
-	
-	public Set<Justificacion> getJustificaciones() {
+	public List<Justificacion> getJustificaciones() {
 		return justificaciones;
 	}
 
-	public void setJustificaciones(Set<Justificacion> justificaciones) {
+	public void setJustificaciones(List<Justificacion> justificaciones) {
 		this.justificaciones = justificaciones;
 	}
-	
-	
+
 
 
 }

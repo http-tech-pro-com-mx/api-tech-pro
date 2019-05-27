@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -72,9 +73,10 @@ public class Justificacion implements Serializable {
 			joinColumns = @JoinColumn(name = "id_justificacion", nullable = false),
 					 inverseJoinColumns = @JoinColumn(name="id_dia_habil", nullable = false)
 	)
-//	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	@JsonIgnore
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	@JsonManagedReference
-	private Set<DiaHabil> id_dia_habil;
+	private List<DiaHabil> dias;
 	
 
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -185,16 +187,15 @@ public class Justificacion implements Serializable {
 		this.id_personal_autoriza = id_personal_autoriza;
 	}
 
-	public Set<DiaHabil> getId_dia_habil() {
-		return id_dia_habil;
+	public List<DiaHabil> getDias() {
+		return dias;
 	}
 
-	public void setId_dia_habil(Set<DiaHabil> id_dia_habil) {
-		this.id_dia_habil = id_dia_habil;
+	public void setDias(List<DiaHabil> dias) {
+		this.dias = dias;
 	}
+
 	
-	
-	
-	
+
 	
 }
