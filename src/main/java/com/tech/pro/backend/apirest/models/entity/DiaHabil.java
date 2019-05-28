@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
@@ -22,7 +23,9 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="tech_dia_habil")
@@ -48,10 +51,12 @@ public class DiaHabil implements Serializable{
 	
 	private Long id_usuario_registro;
 	
-	@ManyToMany(cascade=CascadeType.ALL, mappedBy="dias")
+
+	
+	@ManyToMany(mappedBy="dias")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	@JsonBackReference
-	private List<Justificacion> justificaciones;
+	private List<Justificacion> justificaciones; 
 	
 	
 	@Temporal(TemporalType.DATE)

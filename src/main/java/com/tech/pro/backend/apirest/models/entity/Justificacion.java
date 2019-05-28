@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -67,7 +68,8 @@ public class Justificacion implements Serializable {
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Personal id_personal;
 	
-	@ManyToMany(cascade=CascadeType.ALL)
+
+	@ManyToMany( cascade = CascadeType.MERGE)
 	@JoinTable(
 			name = "tech_justificacion_dia_habil",
 			joinColumns = @JoinColumn(name = "id_justificacion", nullable = false),
@@ -79,8 +81,8 @@ public class Justificacion implements Serializable {
 	private List<DiaHabil> dias;
 	
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="id_personal_autoriza")
+	@ManyToOne(optional = true, fetch=FetchType.LAZY)
+	@JoinColumn(name="id_personal_autoriza", nullable = true)
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Personal id_personal_autoriza;
 

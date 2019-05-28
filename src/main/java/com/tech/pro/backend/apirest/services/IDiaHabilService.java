@@ -20,4 +20,6 @@ public interface IDiaHabilService {
 	public DiaHabil existsByFechaDisabled(Date fecha); 
 	
 	public List<DiaHabil> findAll();
+	
+	public DiaHabil getFecha(Date fecha);
 }

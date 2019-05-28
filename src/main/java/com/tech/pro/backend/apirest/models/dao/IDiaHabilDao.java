@@ -21,5 +21,8 @@ public interface IDiaHabilDao extends JpaRepository<DiaHabil, Long>{
 	
 	@Query("from DiaHabil d where d.fecha=?1 and d.estatus=0")
 	public DiaHabil existsByFechaDisabled(Date fecha); 
+	
+	@Query("from DiaHabil d where d.fecha=?1 and d.estatus=1")
+	public DiaHabil getFecha(Date fecha);
 
 }

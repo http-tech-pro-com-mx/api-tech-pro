@@ -68,6 +68,13 @@ public class DiaHabilServiceImpl implements IDiaHabilService {
 	public List<DiaHabil> findAll() {
 		return iDiaHabilDao.findAll();
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public DiaHabil getFecha(Date fecha) {
+		return iDiaHabilDao.getFecha(fecha);
+	}
+	
 	
 	
 	
