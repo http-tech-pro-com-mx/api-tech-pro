@@ -69,7 +69,7 @@ public class Justificacion implements Serializable {
 	private Personal id_personal;
 	
 
-	@ManyToMany( cascade = CascadeType.MERGE)
+	@ManyToMany( cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "tech_justificacion_dia_habil",
 			joinColumns = @JoinColumn(name = "id_justificacion", nullable = false),
