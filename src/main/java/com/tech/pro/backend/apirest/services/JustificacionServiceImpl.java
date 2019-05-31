@@ -29,6 +29,14 @@ public class JustificacionServiceImpl implements IJustificacionService {
 	public Justificacion save(Justificacion justificacion) {
 		return iJustificacionDao.save(justificacion);
 	}
+
+	@Override
+	@Transactional
+	public void updateEstatus(Long id_quincena, int estatus, Long id_personal_autoriza) {
+		iJustificacionDao.updateEstatus(id_quincena, estatus, id_personal_autoriza);
+	}
+	
+	
 	
 	
 	

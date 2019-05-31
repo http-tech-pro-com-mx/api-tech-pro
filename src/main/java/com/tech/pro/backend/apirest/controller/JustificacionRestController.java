@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,6 +47,20 @@ public class JustificacionRestController {
 	@GetMapping("/findById/{id_justificacion}")
 	public Justificacion findById(@PathVariable Long id_justificacion) {
 		return justificacionServiceImpl.findById(id_justificacion);
+	}
+	
+	@GetMapping("/findAllJustificaciones")
+	public ResponseEntity<?> findAllJustificaciones(@AuthenticationPrincipal String user_active) {
+		Map<String, Object> response = new HashMap<>();
+		Usuario user = usuarioServiceImpl.findByUsuario(user_active);
+		List<Justificacion> justificaciones = justificacionServiceImpl.findAll();
+		
+		response.put("successful", true);
+		response.put("message", "OK");
+		response.put("justificaciones", justificaciones);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		
 	}
 
 	@PostMapping(path = "/crear")
@@ -81,9 +96,8 @@ public class JustificacionRestController {
 				justificacion.setId_usuario_registro(user.getId_usuario());
 				justificacion.setFecha_registro(new Date());
 				Justificacion justificacion_save = justificacionServiceImpl.save(justificacion);
-				response.put("justificacion", justificacion_save);
 				response.put("successful", true);
-				response.put("message", "OK");
+				response.put("message", "Correo electrónico enviado, espere la respuesta");
 			}else {
 				response.put("successful", false);
 				response.put("message", "El día: " + dia_no_activo.getFecha() + " no es hábil");
@@ -94,6 +108,25 @@ public class JustificacionRestController {
 			response.put("message", "Se requieren días");
 		}
 
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	
+	@PostMapping(path = "/autorizar")
+	public ResponseEntity<?> autorizarJutificacion(@AuthenticationPrincipal String user_active, @RequestBody Map<String,String> payload) {
+		Map<String, Object> response = new HashMap<>();
+		
+		Usuario user = usuarioServiceImpl.findByUsuario(user_active);
+		
+		Long id_justificacion = Long.valueOf(payload.get("id_justificacion"));
+		int estatus = Integer.valueOf(payload.get("estatus"));
+		justificacionServiceImpl.updateEstatus(id_justificacion, estatus, user.getPersonal().getId_personal());
+		
+		Justificacion justificacion_update = justificacionServiceImpl.findById(id_justificacion);
+		
+		response.put("successful", true);
+		response.put("message", "Se notifico correctamente");
+		response.put("justificacion_update", justificacion_update);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }
