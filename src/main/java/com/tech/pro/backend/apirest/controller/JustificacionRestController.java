@@ -14,13 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.tech.pro.backend.apirest.models.entity.DiaHabil;
 import com.tech.pro.backend.apirest.models.entity.Justificacion;
-import com.tech.pro.backend.apirest.models.entity.Quincena;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.DiaHabilServiceImpl;
 import com.tech.pro.backend.apirest.services.JustificacionServiceImpl;
@@ -56,7 +54,7 @@ public class JustificacionRestController {
 	@GetMapping("/findAllJustificaciones")
 	public ResponseEntity<?> findAllJustificaciones(@AuthenticationPrincipal String user_active) {
 		Map<String, Object> response = new HashMap<>();
-		Usuario user = usuarioServiceImpl.findByUsuario(user_active);
+	
 		List<Justificacion> justificaciones = justificacionServiceImpl.findAll();
 		
 		response.put("successful", true);
@@ -71,7 +69,6 @@ public class JustificacionRestController {
 	public ResponseEntity<?> saveJustificacion(@AuthenticationPrincipal String user_active, @RequestBody Justificacion justificacion) {
 
 		Map<String, Object> response = new HashMap<>();
-		ObjectMapper mapper = new ObjectMapper();
 		boolean dias_ok = true;
 		Usuario user = usuarioServiceImpl.findByUsuario(user_active);
 	
@@ -99,7 +96,7 @@ public class JustificacionRestController {
 			if(dias_ok) {
 				justificacion.setId_usuario_registro(user.getId_usuario());
 				justificacion.setFecha_registro(new Date());
-				Justificacion justificacion_save = justificacionServiceImpl.save(justificacion);
+				justificacionServiceImpl.save(justificacion);
 				response.put("successful", true);
 				response.put("message", "Correo electrónico enviado, espere la respuesta");
 			}else {
