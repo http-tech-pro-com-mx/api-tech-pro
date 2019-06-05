@@ -30,6 +30,7 @@ import com.tech.pro.backend.apirest.services.DiaHabilServiceImpl;
 import com.tech.pro.backend.apirest.services.PersonalServiceImpl;
 import com.tech.pro.backend.apirest.services.QuincenaServiceImpl;
 import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;
+import com.tech.pro.backend.apirest.utils.Utils;
 
 @RestController
 @RequestMapping("/api/quincena")
@@ -46,6 +47,9 @@ public class QuincenaController {
 
 	@Autowired
 	private DiaHabilServiceImpl diaHabilServiceImpl;
+	
+	@Autowired
+	private Utils utils;
 
 	@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@GetMapping("/findAll")
@@ -197,9 +201,10 @@ public class QuincenaController {
 						response.put("successful", true);
 						response.put("message", "Registro correcto");
 					} else {
+						String date_format = utils.getFormatDate(dia_duplicado.getFecha());
 						response.put("successful", false);
 						response.put("message",
-								"Día: " + dia_duplicado.getFecha() + " ya esta registrado en otra quincena");
+								"Día: " + date_format + " ya esta registrado en otra quincena");
 					}
 
 				} else {
@@ -316,9 +321,10 @@ public class QuincenaController {
 						response.put("successful", true);
 						response.put("message", "Actualización correcta");
 					} else {
+						String date_format = utils.getFormatDate(dia_duplicado.getFecha());
 						response.put("successful", false);
 						response.put("message",
-								"Día: " + dia_duplicado.getFecha() + " ya esta registrado en otra quincena");
+								"Día: " + date_format + " ya esta registrado en otra quincena");
 					}
 
 				} else {

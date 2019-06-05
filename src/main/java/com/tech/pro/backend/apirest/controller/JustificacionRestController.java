@@ -25,6 +25,7 @@ import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.DiaHabilServiceImpl;
 import com.tech.pro.backend.apirest.services.JustificacionServiceImpl;
 import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;
+import com.tech.pro.backend.apirest.utils.Utils;
 
 @RestController
 @RequestMapping("/api/justificacion")
@@ -38,6 +39,9 @@ public class JustificacionRestController {
 	
 	@Autowired
 	private UsuarioServiceImpl usuarioServiceImpl;
+	
+	@Autowired
+	private Utils utils;
 
 	@GetMapping("/findAll")
 	public List<Justificacion> findAll() {
@@ -99,8 +103,9 @@ public class JustificacionRestController {
 				response.put("successful", true);
 				response.put("message", "Correo electrónico enviado, espere la respuesta");
 			}else {
+				String date_format = utils.getFormatDate(dia_no_activo.getFecha());
 				response.put("successful", false);
-				response.put("message", "El día: " + dia_no_activo.getFecha() + " no es hábil");
+				response.put("message", "El día: " + date_format + " no es hábil");
 			}
 			
 		} else {
