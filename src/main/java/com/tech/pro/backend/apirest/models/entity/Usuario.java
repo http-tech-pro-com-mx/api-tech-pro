@@ -39,8 +39,8 @@ public class Usuario implements Serializable {
 	@NotEmpty(message="La contraseña no puede ser vacía")
 	private String contrasenia;
 	
-	
-	private int userid;
+	@Column(nullable=true)
+	private Integer userid;
 	
 	@NotNull(message="Se requiere ser personal de tech")
 	@OneToOne
@@ -84,11 +84,11 @@ public class Usuario implements Serializable {
 		this.contrasenia = contrasenia;
 	}
 
-	public int getUserid() {
+	public Integer getUserid() {
 		return userid;
 	}
 
-	public void setUserid(int userid) {
+	public void setUserid(Integer userid) {
 		this.userid = userid;
 	}
 

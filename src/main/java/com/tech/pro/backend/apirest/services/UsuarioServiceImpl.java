@@ -25,8 +25,8 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	
 	@Override
 	@Transactional(readOnly=true)
-	public List<Usuario> findAll() {
-		return (List<Usuario> )usuarioDao.findAll();
+	public List<Usuario> findAllByOrderByEstatusDesc() {
+		return (List<Usuario> )usuarioDao.findAllByOrderByEstatusDesc();
 	}
 
 	

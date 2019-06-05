@@ -7,7 +7,7 @@ import com.tech.pro.backend.apirest.models.entity.Usuario;
 
 public interface IUsuarioService {
 	
-	public List<Usuario> findAll();
+	public List<Usuario> findAllByOrderByEstatusDesc();
 	
 	public Usuario findByUsuario(String usuario);
 	

@@ -2,6 +2,7 @@ package com.tech.pro.backend.apirest.models.dao;
 
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,5 +31,7 @@ public interface IUsuarioDao extends JpaRepository<Usuario, Long>{
 	
 	@Query("SELECT badgenumber from v_userinfo where userid =?1")
 	public String findBadgeNumber(Long userid);
+	
+	public List<Usuario> findAllByOrderByEstatusDesc();
 	
 }

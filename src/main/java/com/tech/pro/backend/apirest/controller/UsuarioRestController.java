@@ -54,10 +54,18 @@ public class UsuarioRestController {
 	
 
 	
-	@Secured({"ROLE_CONSULTA_USUARIO"})
+	//@Secured({"ROLE_CONSULTA_USUARIO"})
 	@GetMapping("/findAll")
-	public List<Usuario> index(){
-		return usuarioServiceImpl.findAll();
+	public ResponseEntity<?> index(){
+		Map<String, Object> response =  new HashMap<>();
+		
+		List<Usuario> lista_empleados = usuarioServiceImpl.findAllByOrderByEstatusDesc();
+		
+		response.put("lista_empleados", lista_empleados);
+		response.put("successful", true);
+		response.put("message", "OK");
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	} 
 	
 	@Secured({"ROLE_CONSULTA_PERFIL"})
