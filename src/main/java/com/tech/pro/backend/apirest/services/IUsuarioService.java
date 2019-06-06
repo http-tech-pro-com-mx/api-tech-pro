@@ -1,7 +1,6 @@
 package com.tech.pro.backend.apirest.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 
@@ -18,4 +17,6 @@ public interface IUsuarioService {
 	public Usuario findById(Long id_usuario);
 	
 	public String findBadgeNumber(Long userid);
+	
+	public void updateEstatus(Long id_usuario, Boolean estatus);
 }

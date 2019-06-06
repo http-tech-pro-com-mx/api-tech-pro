@@ -34,4 +34,8 @@ public interface IUsuarioDao extends JpaRepository<Usuario, Long>{
 	
 	public List<Usuario> findAllByOrderByEstatusDesc();
 	
+	@Modifying
+	@Query("update Usuario u set u.estatus =?2 where u.id_usuario =?1")
+	public void updateEstatus(Long id_usuario, Boolean estatus);
+	
 }

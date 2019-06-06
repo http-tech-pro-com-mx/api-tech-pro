@@ -203,4 +203,19 @@ public class UsuarioRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
+	@PostMapping(path="/updateEstatus")
+	public ResponseEntity<?> updateEstatus(@AuthenticationPrincipal String user_active, @RequestBody  Map<String,String> params){
+		Map<String, Object> response =  new HashMap<>();
+		Long id_usuario = Long.valueOf(params.get("id_usuario"));
+		boolean estatus = !Boolean.valueOf(params.get("estatus"));
+		String mensaje = estatus ? "Usuario dado de alta" : "Usuario dado de baja";
+		
+		usuarioServiceImpl.updateEstatus(id_usuario, estatus);
+		
+		response.put("successful", true);
+		response.put("message", mensaje);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
 }

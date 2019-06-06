@@ -75,6 +75,14 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	public int findById_personal(Long id_personal) {
 		return usuarioDao.findById_personal(id_personal);
 	}
+
+
+	@Override
+	@Transactional
+	public void updateEstatus(Long id_usuario, Boolean estatus) {
+		usuarioDao.updateEstatus(id_usuario, estatus);
+	}
+	
 	
 	
 	
