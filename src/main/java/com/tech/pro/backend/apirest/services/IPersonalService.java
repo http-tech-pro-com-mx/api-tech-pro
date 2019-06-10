@@ -15,4 +15,6 @@ public interface IPersonalService {
 	public Personal findById(Long id_personal);
 	
 	public List<Object[]> findAllPersonal();
+	
+	public List<Object[]> findAllPersonalJefes();
 }

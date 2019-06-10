@@ -16,5 +16,8 @@ public interface IPersonalDao extends JpaRepository<Personal, Long>{
 	@Query("select p.id_personal, CONCAT(p.nombre, ' ' ,p.apellido_paterno , ' ', ISNULL(p.apellido_materno,'')) from Personal p inner join Usuario u ON(p.id_personal = u.personal.id_personal) where u.estatus=true order by p.nombre, p.apellido_paterno DESC")
 	public List<Object[]> findAllPersonal();
 	
+	
+	@Query("select p.id_personal, CONCAT(p.nombre, ' ' ,p.apellido_paterno , ' ', ISNULL(p.apellido_materno,'')) from Personal p inner join Usuario u ON(p.id_personal = u.personal.id_personal) where (u.estatus=true and p.nivel_jerarquico=1) order by p.nombre, p.apellido_paterno DESC")
+	public List<Object[]> findAllPersonalJefes();
 
 }

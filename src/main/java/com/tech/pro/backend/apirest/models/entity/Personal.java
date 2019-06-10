@@ -61,6 +61,8 @@ public class Personal implements Serializable {
 	
 	private String nombre_foto;
 	
+	private int nivel_jerarquico;
+	
 
 	public Long getId_personal() {
 		return id_personal;
@@ -133,11 +135,15 @@ public class Personal implements Serializable {
 	public void setNombre_foto(String nombre_foto) {
 		this.nombre_foto = nombre_foto;
 	}
+
+	public int getNivel_jerarquico() {
+		return nivel_jerarquico;
+	}
+
+	public void setNivel_jerarquico(int nivel_jerarquico) {
+		this.nivel_jerarquico = nivel_jerarquico;
+	}
 	
-	
-	
-	
-	
-	
+
 
 }

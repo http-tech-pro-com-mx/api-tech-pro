@@ -44,6 +44,12 @@ public class PersonalServiceImpl implements IPersonalService{
 	public List<Object[]> findAllPersonal() {
 		return personalDao.findAllPersonal();
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Object[]> findAllPersonalJefes() {
+		return personalDao.findAllPersonalJefes();
+	}
 	
 	
 	

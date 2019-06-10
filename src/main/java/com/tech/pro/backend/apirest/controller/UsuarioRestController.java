@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tech.pro.backend.apirest.models.entity.Area;
+import com.tech.pro.backend.apirest.models.entity.Perfil;
 import com.tech.pro.backend.apirest.models.entity.Personal;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.AreaServiceImpl;
@@ -76,6 +77,10 @@ public class UsuarioRestController {
 		
 		if(getUser != null) {
 			List<Area> listaAreas = areaServiceImpl.findAll();
+			List<Perfil> listPerfiles = personalServiceImpl.findAllPerfil();
+			List<Object[]> jefes_inmediatos = personalServiceImpl.findAllPersonalJefes();
+			response.put("perfiles", listPerfiles);
+			response.put("jefes_inmediatos", jefes_inmediatos);
 			response.put("areas", listaAreas);
 			response.put("getUser", getUser);
 		    response.put("successful", true);
