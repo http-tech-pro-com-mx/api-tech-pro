@@ -63,6 +63,8 @@ public class Personal implements Serializable {
 	
 	private int nivel_jerarquico;
 	
+	private Long jefe_directo;
+	
 
 	public Long getId_personal() {
 		return id_personal;
@@ -143,6 +145,16 @@ public class Personal implements Serializable {
 	public void setNivel_jerarquico(int nivel_jerarquico) {
 		this.nivel_jerarquico = nivel_jerarquico;
 	}
+
+	public Long getJefe_directo() {
+		return jefe_directo;
+	}
+
+	public void setJefe_directo(Long jefe_directo) {
+		this.jefe_directo = jefe_directo;
+	}
+	
+	
 	
 
 
