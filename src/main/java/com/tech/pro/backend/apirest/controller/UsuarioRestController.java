@@ -69,7 +69,7 @@ public class UsuarioRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	} 
 	
-	@Secured({"ROLE_CONSULTA_PERFIL"})
+//	@Secured({"ROLE_CONSULTA_PERFIL"})
 	@GetMapping("/profile/{usuario}")
 	public ResponseEntity<?> findByUser(@PathVariable String usuario){
 		Map<String, Object> response =  new HashMap<>();

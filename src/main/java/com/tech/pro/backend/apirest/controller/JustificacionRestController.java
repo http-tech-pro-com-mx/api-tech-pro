@@ -22,6 +22,7 @@ import com.tech.pro.backend.apirest.models.entity.Justificacion;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.DiaHabilServiceImpl;
 import com.tech.pro.backend.apirest.services.JustificacionServiceImpl;
+import com.tech.pro.backend.apirest.services.PersonalServiceImpl;
 import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;
 import com.tech.pro.backend.apirest.utils.Utils;
 
@@ -40,6 +41,9 @@ public class JustificacionRestController {
 	
 	@Autowired
 	private Utils utils;
+	
+	@Autowired
+	private PersonalServiceImpl personalServiceImpl;
 
 	@GetMapping("/findAll")
 	public List<Justificacion> findAll() {
@@ -129,6 +133,20 @@ public class JustificacionRestController {
 		response.put("successful", true);
 		response.put("message", "Se notifico correctamente");
 		response.put("justificacion_update", justificacion_update);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/findEmpleados")
+	public ResponseEntity<?> findEmpleados() {
+		
+		Map<String, Object> response = new HashMap<>();
+		
+		List<Object[]> personal = personalServiceImpl.findAllPersonal();
+		
+		response.put("successful", true);
+		response.put("message", "OK");
+		response.put("empleados", personal);
+		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }
