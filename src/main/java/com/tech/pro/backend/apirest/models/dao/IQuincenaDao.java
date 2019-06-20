@@ -23,6 +23,7 @@ public interface IQuincenaDao extends JpaRepository<Quincena, Long> {
 
 	@Query("select m from Mes m")
 	public List<Mes> findAllMoth();
+	
 
 	@Procedure(name = "sp_reporteEntradaSalida")
 	public List<Object[]> reporteEntradaSalida(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,
@@ -31,6 +32,10 @@ public interface IQuincenaDao extends JpaRepository<Quincena, Long> {
 	@Procedure(name = "sp_reporte_hora_comida")
 	public List<Object[]> reporteHoraComida(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,
 			@Param("numero_quincena") int numero_quincena, @Param("userid") int userid) throws SQLException;
+	
+	@Procedure(name = "sp_reporteGlobalFaltas")
+	public List<Object[]> reporteGlobal(@Param("id_anio") Long id_anio, @Param("id_mes") Long id_mes,
+			@Param("numero_quincena") int numero_quincena) throws SQLException;
 	
 	@Query("select count(q) from Quincena q where q.id_mes.id_mes =?1 and q.id_anio.id_anio =?2  and q.numero_quincena =?3")
 	public int findQuincenaByMesAndAnioAndNumberQ(Long id_mes, Long id_anio, Long numero_quincena);

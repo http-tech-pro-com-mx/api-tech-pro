@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name="tech_justificacion")
 public class Justificacion implements Serializable {
-
+	
 	/**
 	 * 
 	 */

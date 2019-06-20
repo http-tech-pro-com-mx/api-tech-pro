@@ -13,4 +13,6 @@ public interface IJustificacionService {
 	public Justificacion save(Justificacion justificacion);
 	
 	public void updateEstatus(Long id_quincena, int estatus, Long id_personal_autoriza);
+	
+	public int existsJustificationDay(Long id_dia_habil, Long id_personal);
 }

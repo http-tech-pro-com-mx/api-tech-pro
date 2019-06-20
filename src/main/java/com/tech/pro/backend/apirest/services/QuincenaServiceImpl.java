@@ -101,6 +101,37 @@ public class QuincenaServiceImpl implements IQuincenaService {
 		}
 		return object;
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Object[]> reporteGlobal(Long id_anio, Long id_mes, int numero_quincena)
+			throws SQLException {
+		List<Object[]> object = null;
+
+		try {
+
+			StoredProcedureQuery storedProcedure = manager.createStoredProcedureQuery("sp_reporteGlobalFaltas")
+					.registerStoredProcedureParameter(0, Long.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(1, Long.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN);
+
+
+			storedProcedure.setParameter(0, id_anio).setParameter(1, id_mes).setParameter(2, numero_quincena);
+
+			storedProcedure.execute();
+
+			object = storedProcedure.getResultList();
+			
+			
+			manager.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return object;
+		}
+		return object;
+	}
+
 
 	@Override
 	@Transactional

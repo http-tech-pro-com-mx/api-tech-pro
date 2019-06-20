@@ -35,6 +35,14 @@ public class JustificacionServiceImpl implements IJustificacionService {
 	public void updateEstatus(Long id_quincena, int estatus, Long id_personal_autoriza) {
 		iJustificacionDao.updateEstatus(id_quincena, estatus, id_personal_autoriza);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int existsJustificationDay(Long id_dia_habil, Long id_personal) {
+		return iJustificacionDao.existsJustificationDay(id_dia_habil, id_personal);
+	}
+	
+	
 	
 	
 	

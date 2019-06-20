@@ -153,6 +153,32 @@ public class QuincenaController {
 		response.put("message", "OK");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+	
+	@Secured({ "ROLE_CONSULTA_ADMIN" })
+	@PostMapping(path = "/reporteGlobal")
+	public ResponseEntity<?> reporteGlobal(@RequestBody Map<String, String> params) {
+		Map<String, Object> response = new HashMap<>();
+		List<Object[]> reporte = null;
+		List<Object[]> lista_hora_comida = null;
+		Long id_anio = Long.valueOf(params.get("anio"));
+		Long id_mes = Long.valueOf(params.get("mes"));
+		int quincena_number = Integer.valueOf(params.get("quincena"));
+		
+
+		try {
+			reporte = quincenaServiceImpl.reporteGlobal(id_anio, id_mes, quincena_number);
+			response.put("successful", true);
+			response.put("message", "OK");
+		} catch (SQLException e) {
+			response.put("successful", false);
+			response.put("message", e.getMessage());
+		}
+
+		response.put("reporte", reporte);
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+
+	}
 
 	@Secured({ "ROLE_CREATE_QUINCENA" })
 	@PostMapping(path = "/create-quincena")

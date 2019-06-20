@@ -2,7 +2,6 @@ package com.tech.pro.backend.apirest.services;
 
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 import com.tech.pro.backend.apirest.models.entity.Anio;
@@ -21,6 +20,8 @@ public interface IQuincenaService {
 	public List<Object[]> reporteEntradaSalida(Long id_anio, Long id_mes, int numero_quincena, int userid) throws SQLException;
 	
 	public List<Object[]> reporteHoraComida(Long id_anio, Long id_mes, int numero_quincena, int userid) throws SQLException;
+	
+	public List<Object[]> reporteGlobal(Long id_anio, Long id_mes, int numero_quincena) throws SQLException;
 	
 	public Quincena save(Quincena quincena);
 	
