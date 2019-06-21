@@ -1,5 +1,6 @@
 package com.tech.pro.backend.apirest.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,26 @@ public class JustificacionServiceImpl implements IJustificacionService {
 	@Transactional(readOnly = true)
 	public int existsJustificationDay(Long id_dia_habil, Long id_personal) {
 		return iJustificacionDao.existsJustificationDay(id_dia_habil, id_personal);
+	}
+
+	@Override
+	@Transactional
+	public List<Justificacion> saveAll(List<Justificacion> entities) {
+		List<Justificacion> result = new ArrayList<Justificacion>();
+		
+		if (entities == null) {
+	        return result;
+		}
+		
+		for(Justificacion entity : entities) {
+			result.add(iJustificacionDao.save(entity));
+		}
+		return result;
+	}
+
+	@Override
+	public List<Justificacion> findAllOrderById_quincena() {
+		return iJustificacionDao.findAllOrderById_quincena();
 	}
 	
 	

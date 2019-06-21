@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +61,7 @@ public class JustificacionRestController {
 	public ResponseEntity<?> findAllJustificaciones(@AuthenticationPrincipal String user_active) {
 		Map<String, Object> response = new HashMap<>();
 
-		List<Justificacion> justificaciones = justificacionServiceImpl.findAll();
+		List<Justificacion> justificaciones = justificacionServiceImpl.findAllOrderById_quincena();
 
 		response.put("successful", true);
 		response.put("message", "OK");
@@ -102,11 +101,32 @@ public class JustificacionRestController {
 			}
 
 			if (dias_ok) {
-				justificacion.setId_usuario_registro(user.getId_usuario());
-				justificacion.setFecha_registro(new Date());
-				justificacionServiceImpl.save(justificacion);
-				response.put("successful", true);
-				response.put("message", "Correo electrónico enviado, espere la respuesta");
+				DiaHabil dia_con_just = null;
+				boolean registros_ok = true;
+				// Verifica que no exista otra justificacion para ese día
+				for (DiaHabil dia : dias_solicitados) {
+					if (justificacionServiceImpl.existsJustificationDay(dia.getId_dia_habil(), user.getPersonal().getId_personal()) == 1) {
+						registros_ok = false;
+						dia_con_just = dia;
+						break;
+					}
+				}
+				if (registros_ok) {
+					
+					justificacion.setId_usuario_registro(user.getId_usuario());
+					justificacion.setFecha_registro(new Date());
+					justificacionServiceImpl.save(justificacion);
+
+					response.put("successful", true);
+					response.put("message", "Correo electrónico enviado, espere la respuesta");
+					
+				} else {
+					response.put("successful", false);
+					response.put("message", "Ya tiene justificante para el día: "
+							+ utils.getFormatDate(dia_con_just.getFecha()));
+				}
+
+				
 			} else {
 				String date_format = utils.getFormatDate(dia_no_activo.getFecha());
 				response.put("successful", false);
@@ -192,7 +212,7 @@ public class JustificacionRestController {
 			if (dias_ok) {
 				// Si los dias seleccionados son correctos
 				justificacion.setId_usuario_registro(user.getId_usuario());
-				justificacion.setFecha_registro(new Date());
+//				justificacion.setFecha_registro(new Date());
 				// 3 Indica que será justificada directamente sin pasar por la validacion
 				justificacion.setId_estatus(3);
 
@@ -207,6 +227,7 @@ public class JustificacionRestController {
 					Long id_personal = Long.valueOf(id_personal_emp);
 					Justificacion justificacion_empleado = new Justificacion();
 					// Setea los valores a la nueva justificacion
+					justificacion_empleado.setId_justificacion(justificacion.getId_justificacion());
 					justificacion_empleado.setMotivo(justificacion.getMotivo());
 					justificacion_empleado.setDescripcion(justificacion.getDescripcion());
 					justificacion_empleado.setId_estatus(justificacion.getId_estatus());
@@ -214,47 +235,45 @@ public class JustificacionRestController {
 					justificacion_empleado.setFecha_registro(justificacion.getFecha_registro());
 					justificacion_empleado.setDias(justificacion.getDias());
 					justificacion_empleado.setId_personal_autoriza(justificacion.getId_personal_autoriza());
-					
+
 					empleado = personalServiceImpl.findById(id_personal);
 
 					// Verifica si no existe justificacion ya regitrada para el usuario en el mismo
 					// día
 					registros_ok = true;
-					
+
 					for (DiaHabil dia : justificacion_empleado.getDias()) {
-						if(justificacionServiceImpl.existsJustificationDay(dia.getId_dia_habil(), id_personal) == 1) {
+						if (justificacionServiceImpl.existsJustificationDay(dia.getId_dia_habil(), id_personal) == 1) {
 							registros_ok = false;
 							dia_con_just = dia;
 							break;
 						}
 					}
-					
-					if(registros_ok) {
+
+					if (registros_ok) {
 						empleado.setId_personal(id_personal);
 						justificacion_empleado.setId_personal(empleado);
 						justificaciones.add(justificacion_empleado);
-					}else {
+					} else {
 						break;
 					}
-					
 
 				}
-				
+
 				if (registros_ok) {
 					// Setea el empleado que se justificara y se agregara a la lista de
 					// justificaciones si todo es correcto
-					
-					
-					response.put("listo", justificaciones);
+					justificacionServiceImpl.saveAll(justificaciones);
 					response.put("successful", true);
 					response.put("message", "Empleado(s) justificado(s). Correo electrónico enviado.");
+
 				} else {
-					String nombre_empleado = empleado.getNombre() +" "+ empleado.getApellido_materno();
+					String nombre_empleado = empleado.getNombre() + " " + empleado.getApellido_paterno();
 					response.put("successful", false);
-					response.put("message", nombre_empleado +" ya hizo su justificante para el día: "+ utils.getFormatDate(dia_con_just.getFecha()));
+					response.put("message", nombre_empleado + " ya hizo su justificante para el día: "
+							+ utils.getFormatDate(dia_con_just.getFecha()));
 				}
 
-				
 			} else {
 				String date_format = utils.getFormatDate(dia_no_activo.getFecha());
 				response.put("successful", false);

@@ -15,4 +15,10 @@ public interface IJustificacionService {
 	public void updateEstatus(Long id_quincena, int estatus, Long id_personal_autoriza);
 	
 	public int existsJustificationDay(Long id_dia_habil, Long id_personal);
+	
+	public List<Justificacion> saveAll(List<Justificacion> entities);
+	
+	public List<Justificacion> findAllOrderById_quincena();
+	
+	
 }

@@ -2,6 +2,8 @@ package com.tech.pro.backend.apirest.models.dao;
 
 
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query; 
@@ -19,4 +21,7 @@ public interface IJustificacionDao extends JpaRepository<Justificacion, Long> {
 			"	AND jus.id_personal =?2" + 
 			"	AND jus.id_estatus IN (1, 3)", nativeQuery=true)
 	public int existsJustificationDay(Long id_dia_habil, Long id_personal);
+	
+	@Query("from Justificacion order by id_justificacion desc")
+	public List<Justificacion> findAllOrderById_quincena();   
 }

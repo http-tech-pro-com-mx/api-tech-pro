@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tech.pro.backend.apirest.models.dao.IPersonalDao;
 import com.tech.pro.backend.apirest.models.entity.Perfil;
 import com.tech.pro.backend.apirest.models.entity.Personal;
+import com.tech.pro.backend.apirest.models.entity.Usuario;
 
 @Service
 public class PersonalServiceImpl implements IPersonalService{
@@ -50,6 +51,13 @@ public class PersonalServiceImpl implements IPersonalService{
 	public List<Object[]> findAllPersonalJefes() {
 		return personalDao.findAllPersonalJefes();
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Usuario existeEmail(String correo_electronico) {
+		return personalDao.existeEmail(correo_electronico);
+	}
+	
 	
 	
 	
