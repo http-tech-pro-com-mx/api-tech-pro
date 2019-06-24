@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -227,6 +228,11 @@ public class UsuarioRestController {
 		if (existe_user != null) {
 
 			if (existe_user.getEstatus()) {
+				String nueva_pwd = RandomStringUtils.randomAlphanumeric(10);
+				String encryp = passwordEncoder.encode(nueva_pwd);
+				usuarioServiceImpl.updateContrasenia(encryp, existe_user.getId_usuario());
+			
+				response.put("nueva", nueva_pwd);
 				response.put("successful", true);
 				response.put("message", existe_user);
 			} else {

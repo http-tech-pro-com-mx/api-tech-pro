@@ -1,8 +1,10 @@
 package com.tech.pro.backend.apirest.services;
 
 import java.util.List;
-import java.util.Optional;
+
+
 import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -82,6 +84,8 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	public void updateEstatus(Long id_usuario, Boolean estatus) {
 		usuarioDao.updateEstatus(id_usuario, estatus);
 	}
+	
+
 	
 	
 	

@@ -19,4 +19,6 @@ public interface IUsuarioService {
 	public String findBadgeNumber(Long userid);
 	
 	public void updateEstatus(Long id_usuario, Boolean estatus);
+	
+	
 }
