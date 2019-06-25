@@ -5,10 +5,13 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -91,15 +94,21 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	}
 	
 	
-	public void sendEmail(List<String> arg_correos, String subject, String texto) {
+	public void sendEmail(List<String> arg_correos, String subject, String texto) throws MessagingException {
 		String correos = String.join(",",arg_correos);
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(correos);
-
-        msg.setSubject(subject);
-        msg.setText(texto);
-
-        javaMailSender.send(msg);
+		MimeMessage message = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
+		message.setContent(texto, "text/html");
+		helper.setTo(correos);
+	    helper.setSubject(subject);
+		
+//        SimpleMailMessage msg = new SimpleMailMessage();
+//        msg.setTo(correos);
+//
+//        msg.setSubject(subject);
+//        msg.setText(texto);
+//
+        javaMailSender.send(message);
 
     }
 

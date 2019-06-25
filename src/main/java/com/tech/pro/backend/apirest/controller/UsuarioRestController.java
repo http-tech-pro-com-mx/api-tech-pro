@@ -241,7 +241,7 @@ public class UsuarioRestController {
 				
 				try {
 					usuarioServiceImpl.updateContrasenia(encryp, existe_user.getId_usuario());
-					usuarioServiceImpl.sendEmail(destinatario, "Recuperación de contraseña", "Nos ha solicitado restablecer su contraseña para nuestro sistema. Ingrese : <b>" + nueva_pwd + "</b> para iniciar sesión");
+					usuarioServiceImpl.sendEmail(destinatario, "Recuperación de contraseña", "Nos ha solicitado restablecer su contraseña para nuestro sistema. Ingrese :  <b>" + nueva_pwd + "</b>  para iniciar sesión");
 					response.put("nueva", nueva_pwd);
 					response.put("successful", true);
 					response.put("message", existe_user);
