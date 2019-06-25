@@ -94,20 +94,14 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	}
 	
 	
-	public void sendEmail(List<String> arg_correos, String subject, String texto) throws MessagingException {
+	public void sendEmail(List<String> arg_correos,String subject, String texto) throws MessagingException {
 		String correos = String.join(",",arg_correos);
 		MimeMessage message = javaMailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
-		message.setContent(texto, "text/html");
+		MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+		message.setContent(texto, "text/html; charset=utf-8");
 		helper.setTo(correos);
 	    helper.setSubject(subject);
 		
-//        SimpleMailMessage msg = new SimpleMailMessage();
-//        msg.setTo(correos);
-//
-//        msg.setSubject(subject);
-//        msg.setText(texto);
-//
         javaMailSender.send(message);
 
     }
