@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -116,9 +118,19 @@ public class JustificacionRestController {
 					justificacion.setId_usuario_registro(user.getId_usuario());
 					justificacion.setFecha_registro(new Date());
 					justificacionServiceImpl.save(justificacion);
+					List<String> destinatario = new ArrayList<>();
+					destinatario.add(user.getPersonal().getCorreo_electronico());
+					
+					try {
+						String nombre = user.getPersonal().getNombre() +" "+user.getPersonal().getApellido_paterno();
+						usuarioServiceImpl.sendEmail(destinatario, "Validar justificante","<b>" + nombre +"</b> hizo un nuevo justificante, tiene que validar. Ir a <a href='#'>Sistema TECH-PRO</a>");
+						response.put("message", "Correo electrónico enviado, espere la respuesta");
+					} catch (MessagingException e) {
+						response.put("message", "Se creo la solicitud, pero no se envio el correo");
+					}
 
 					response.put("successful", true);
-					response.put("message", "Correo electrónico enviado, espere la respuesta");
+					
 					
 				} else {
 					response.put("successful", false);
