@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -24,6 +26,9 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	
 	@Autowired
 	private IUsuarioDao usuarioDao;
+	
+    @Autowired
+    private JavaMailSender javaMailSender;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -85,6 +90,18 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 		usuarioDao.updateEstatus(id_usuario, estatus);
 	}
 	
+	
+	public void sendEmail(List<String> arg_correos, String subject, String texto) {
+		String correos = String.join(",",arg_correos);
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(correos);
+
+        msg.setSubject(subject);
+        msg.setText(texto);
+
+        javaMailSender.send(msg);
+
+    }
 
 	
 	

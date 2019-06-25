@@ -2,6 +2,7 @@ package com.tech.pro.backend.apirest.controller;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -218,6 +219,8 @@ public class UsuarioRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
+
+	
 	@PostMapping(path = "/forgot-password-user")
 	public ResponseEntity<?> forgotPasswordUser(@RequestBody String params) {
 		Map<String, Object> response = new HashMap<>();
@@ -228,13 +231,28 @@ public class UsuarioRestController {
 		if (existe_user != null) {
 
 			if (existe_user.getEstatus()) {
+				
+				List<String> destinatario = new ArrayList<>();
+				destinatario.add(existe_user.getPersonal().getCorreo_electronico());
+				
 				String nueva_pwd = RandomStringUtils.randomAlphanumeric(10);
 				String encryp = passwordEncoder.encode(nueva_pwd);
-				usuarioServiceImpl.updateContrasenia(encryp, existe_user.getId_usuario());
+				
+				
+				try {
+					usuarioServiceImpl.updateContrasenia(encryp, existe_user.getId_usuario());
+					usuarioServiceImpl.sendEmail(destinatario, "Recuperación de contraseña", "Nos ha solicitado restablecer su contraseña para nuestro sistema. Ingrese : " + nueva_pwd + " para iniciar sesión");
+					response.put("nueva", nueva_pwd);
+					response.put("successful", true);
+					response.put("message", existe_user);
+				}catch(Exception ex) {
+					
+					response.put("successful", false);
+					response.put("message", ex.getMessage());
+				}
+				
 			
-				response.put("nueva", nueva_pwd);
-				response.put("successful", true);
-				response.put("message", existe_user);
+				
 			} else {
 				response.put("successful", false);
 				response.put("message", "Se inhabilitó la cuenta para: " + correo_electronico);
