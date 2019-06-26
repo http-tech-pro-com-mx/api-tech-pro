@@ -126,7 +126,7 @@ public class JustificacionRestController {
 				
 					
 					//Busca informacion de su jefe directo
-					Personal jefe = personalServiceImpl.findEmailJefeById(user.getPersonal().getId_personal());
+					Personal jefe = personalServiceImpl.findEmailJefeById(user.getPersonal().getJefe_directo());
 					String destinatario = jefe.getCorreo_electronico();
 					
 					try {
