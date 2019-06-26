@@ -20,4 +20,6 @@ public interface IPersonalService {
 	public List<Object[]> findAllPersonalJefes();
 	
 	public Usuario existeEmail(String correo_electronico);
+	
+	public Personal findEmailJefeById(Long id_personal); 
 }

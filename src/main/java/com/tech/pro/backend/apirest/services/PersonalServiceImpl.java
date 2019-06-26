@@ -57,6 +57,14 @@ public class PersonalServiceImpl implements IPersonalService{
 	public Usuario existeEmail(String correo_electronico) {
 		return personalDao.existeEmail(correo_electronico);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Personal findEmailJefeById(Long id_personal) {
+		return personalDao.findEmailJefeById(id_personal);
+	}
+	
+	
 	
 	
 	

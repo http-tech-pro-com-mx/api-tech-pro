@@ -30,6 +30,7 @@ import com.tech.pro.backend.apirest.models.entity.Perfil;
 import com.tech.pro.backend.apirest.models.entity.Personal;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.AreaServiceImpl;
+import com.tech.pro.backend.apirest.services.MailServiceImpl;
 import com.tech.pro.backend.apirest.services.PersonalServiceImpl;
 import com.tech.pro.backend.apirest.services.UploadServiceImpl;
 import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;
@@ -52,6 +53,9 @@ public class UsuarioRestController {
 
 	@Autowired
 	private PersonalServiceImpl personalServiceImpl;
+	
+	@Autowired
+	private MailServiceImpl mailServiceImpl;
 
 	// @Secured({"ROLE_CONSULTA_USUARIO"})
 	@GetMapping("/findAll")
@@ -232,8 +236,7 @@ public class UsuarioRestController {
 
 			if (existe_user.getEstatus()) {
 				
-				List<String> destinatario = new ArrayList<>();
-				destinatario.add(existe_user.getPersonal().getCorreo_electronico());
+				String destinatario = existe_user.getPersonal().getCorreo_electronico();
 				
 				String nueva_pwd = RandomStringUtils.randomAlphanumeric(10);
 				String encryp = passwordEncoder.encode(nueva_pwd);
@@ -241,7 +244,7 @@ public class UsuarioRestController {
 				
 				try {
 					usuarioServiceImpl.updateContrasenia(encryp, existe_user.getId_usuario());
-					usuarioServiceImpl.sendEmail(destinatario,"Recuperación de contraseña", "Nos ha solicitado restablecer su contraseña para nuestro sistema. Ingrese:  <b>" + nueva_pwd + "</b>  para iniciar sesión");
+					mailServiceImpl.sendEmail(destinatario,"Recuperación de contraseña", "Nos ha solicitado restablecer su contraseña para nuestro sistema. Ingrese:  <b>" + nueva_pwd + "</b>  para iniciar sesión");
 					response.put("nueva", nueva_pwd);
 					response.put("successful", true);
 					response.put("message", existe_user);

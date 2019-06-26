@@ -30,9 +30,7 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	@Autowired
 	private IUsuarioDao usuarioDao;
 	
-    @Autowired
-    private JavaMailSender javaMailSender;
-	
+  
 	@Override
 	@Transactional(readOnly=true)
 	public List<Usuario> findAllByOrderByEstatusDesc() {
@@ -92,23 +90,6 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService{
 	public void updateEstatus(Long id_usuario, Boolean estatus) {
 		usuarioDao.updateEstatus(id_usuario, estatus);
 	}
-	
-	
-	public void sendEmail(List<String> arg_correos,String subject, String texto) throws MessagingException {
-		String correos = String.join(",",arg_correos);
-		MimeMessage message = javaMailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
-		message.setContent(texto, "text/html; charset=utf-8");
-		helper.setTo(correos);
-	    helper.setSubject(subject);
 		
-        javaMailSender.send(message);
-
-    }
-
-	
-	
-	
-	
 
 }

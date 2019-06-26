@@ -23,5 +23,8 @@ public interface IPersonalDao extends JpaRepository<Personal, Long>{
 	
 	@Query("select u from Personal p inner join Usuario u ON(p.id_personal = u.personal.id_personal) where (p.correo_electronico =?1)")
 	public Usuario existeEmail(String correo_electronico);
+	
+	@Query("from Personal p where p.id_personal =?1")
+	public Personal findEmailJefeById(Long id_personal); 
 
 }

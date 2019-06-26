@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 
@@ -26,6 +27,7 @@ import com.tech.pro.backend.apirest.models.entity.Personal;
 import com.tech.pro.backend.apirest.models.entity.Usuario;
 import com.tech.pro.backend.apirest.services.DiaHabilServiceImpl;
 import com.tech.pro.backend.apirest.services.JustificacionServiceImpl;
+import com.tech.pro.backend.apirest.services.MailServiceImpl;
 import com.tech.pro.backend.apirest.services.PersonalServiceImpl;
 import com.tech.pro.backend.apirest.services.UsuarioServiceImpl;
 import com.tech.pro.backend.apirest.utils.Utils;
@@ -48,6 +50,9 @@ public class JustificacionRestController {
 
 	@Autowired
 	private PersonalServiceImpl personalServiceImpl;
+	
+	@Autowired
+	private MailServiceImpl mailServiceImpl;
 
 	@GetMapping("/findAll")
 	public List<Justificacion> findAll() {
@@ -118,12 +123,15 @@ public class JustificacionRestController {
 					justificacion.setId_usuario_registro(user.getId_usuario());
 					justificacion.setFecha_registro(new Date());
 					justificacionServiceImpl.save(justificacion);
-					List<String> destinatario = new ArrayList<>();
-					destinatario.add(user.getPersonal().getCorreo_electronico());
+				
+					
+					//Busca informacion de su jefe directo
+					Personal jefe = personalServiceImpl.findEmailJefeById(user.getPersonal().getId_personal());
+					String destinatario = jefe.getCorreo_electronico();
 					
 					try {
 						String nombre = user.getPersonal().getNombre() +" "+user.getPersonal().getApellido_paterno();
-						usuarioServiceImpl.sendEmail(destinatario, "Validar justificante","<b>" + nombre +"</b> hizo un nuevo justificante, tiene que validar. Ir a <a href='#'>Sistema TECH-PRO</a>");
+						mailServiceImpl.sendEmail(destinatario, "Validar justificante","<b>" + nombre +"</b> hizo un nuevo justificante, tiene que validar. Ir a <a href='#'>Sistema TECH-PRO</a>");
 						response.put("message", "Correo electrónico enviado, espere la respuesta");
 					} catch (MessagingException e) {
 						response.put("message", "Se creo la solicitud, pero no se envio el correo");
@@ -166,9 +174,17 @@ public class JustificacionRestController {
 
 		Justificacion justificacion_update = justificacionServiceImpl.findById(id_justificacion);
 
-		response.put("successful", true);
-		response.put("message", "Se notifico correctamente");
+		try {
+			mailServiceImpl.sendEmail(justificacion_update.getId_personal().getCorreo_electronico(), "Respuesta a justificante","Han respondido a tu justificante Ir a <a href='#'>Sistema TECH-PRO</a>");
+			response.put("message", "Se notifico correctamente");
+			
+		} catch (MessagingException e) {
+			response.put("message", "NO se envio email");
+			
+		}
 		response.put("justificacion_update", justificacion_update);
+		response.put("successful", true);
+
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
@@ -275,9 +291,16 @@ public class JustificacionRestController {
 				if (registros_ok) {
 					// Setea el empleado que se justificara y se agregara a la lista de
 					// justificaciones si todo es correcto
+					List<String> destinatarios = justificaciones.stream().map(j -> j.getId_personal().getCorreo_electronico()).collect(Collectors.toList());
 					justificacionServiceImpl.saveAll(justificaciones);
+					try {
+						mailServiceImpl.sendEmailMore(destinatarios,"Nueva justificación", "Se ha generado y aprobado una justificación/solicitud. Para ver detalles ingrese al sistema <a href='#'>Sistema TECH-PRO</a>");
+						response.put("message", "Empleado(s) justificado(s). Correo electrónico enviado.");
+					} catch (MessagingException e) {
+						response.put("message", "Empleado(s) justificado(s). Correo No electrónico enviado.");
+					}					
 					response.put("successful", true);
-					response.put("message", "Empleado(s) justificado(s). Correo electrónico enviado.");
+					
 
 				} else {
 					String nombre_empleado = empleado.getNombre() + " " + empleado.getApellido_paterno();
