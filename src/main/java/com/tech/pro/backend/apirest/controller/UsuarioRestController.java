@@ -96,7 +96,7 @@ public class UsuarioRestController {
 
 	}
 
-	@Secured({ "ROLE_CAMBIAR_PWD" })
+	//@Secured({ "ROLE_CAMBIAR_PWD" })
 	@PostMapping(path = "/changePassword")
 	public ResponseEntity<?> changePassword(@AuthenticationPrincipal String user_active,
 			@RequestBody Map<String, String> params) {

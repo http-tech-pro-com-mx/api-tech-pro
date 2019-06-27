@@ -18,7 +18,7 @@ public class AreaRestController {
 	@Autowired
 	private AreaServiceImpl areaService;
 	
-	@Secured({ "ROLE_CONSULTA" })
+	//@Secured({ "ROLE_CONSULTA" })
 	@GetMapping("/findAll")
 	public List<Area> index(){
 		return areaService.findAll();

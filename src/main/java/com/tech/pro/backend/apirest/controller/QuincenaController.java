@@ -51,7 +51,7 @@ public class QuincenaController {
 	@Autowired
 	private Utils utils;
 
-	@Secured({ "ROLE_CONSULTA_ADMIN" })
+	//@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@GetMapping("/findAll")
 	public ResponseEntity<?> index() {
 		Map<String, Object> response = new HashMap<>();
@@ -63,7 +63,7 @@ public class QuincenaController {
 
 	}
 
-	@Secured({ "ROLE_CONSULTA" })
+	//@Secured({ "ROLE_CONSULTA" })
 	@GetMapping("/findAllAnioAndMonth")
 	public ResponseEntity<?> findAllAnioAndMonth() {
 
@@ -76,7 +76,7 @@ public class QuincenaController {
 
 	}
 
-	@Secured({ "ROLE_CONSULTA_ADMIN" })
+	//@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@GetMapping("/findAllAnioAndMonthAndEmpleado")
 	public ResponseEntity<?> findAllPersonal() {
 
@@ -90,7 +90,7 @@ public class QuincenaController {
 
 	}
 
-	@Secured({ "ROLE_CONSULTA_ADMIN" })
+	//@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@PostMapping(path = "/reporteEntradaSalidaAdmin")
 	public ResponseEntity<?> historialQuincenaAdmin(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();
@@ -127,7 +127,7 @@ public class QuincenaController {
 
 	}
 
-	@Secured({ "ROLE_CONSULTA" })
+	//@Secured({ "ROLE_CONSULTA" })
 	@PostMapping(path = "/reporteEntradaSalida")
 	public ResponseEntity<?> historialQuincena(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();
@@ -154,7 +154,7 @@ public class QuincenaController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
-	@Secured({ "ROLE_CONSULTA_ADMIN" })
+	//@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@PostMapping(path = "/reporteGlobal")
 	public ResponseEntity<?> reporteGlobal(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();
@@ -180,7 +180,7 @@ public class QuincenaController {
 
 	}
 
-	@Secured({ "ROLE_CREATE_QUINCENA" })
+	//@Secured({ "ROLE_CREATE_QUINCENA" })
 	@PostMapping(path = "/create-quincena")
 	public ResponseEntity<?> create(@AuthenticationPrincipal String user_active,
 			@RequestBody Map<Object, Object> params) {

@@ -22,7 +22,7 @@ public class DiaHabilController {
 	
 	@Autowired DiaHabilServiceImpl diaHabilServiceImpl;
 	
-	@Secured({ "ROLE_CONSULTA_ADMIN" })
+	//@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@GetMapping("/findDayByIdQuincena/{id_quincena}")
 	public ResponseEntity<?> findAllDaysByIdQuincena(@PathVariable("id_quincena") Long id_quincena) {		
 		Map<String, Object> response = new HashMap<>();
@@ -32,7 +32,7 @@ public class DiaHabilController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
-	@Secured({ "ROLE_CONSULTA" })
+	//@Secured({ "ROLE_CONSULTA" })
 	@GetMapping("/findAll")
 	public ResponseEntity<?> findAllDays(){
 		Map<String, Object> response = new HashMap<>();
