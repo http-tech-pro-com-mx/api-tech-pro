@@ -127,7 +127,7 @@ public class JustificacionRestController {
 					
 					justificacion.setId_usuario_registro(user.getId_usuario());
 					justificacion.setFecha_registro(new Date());
-					justificacionServiceImpl.save(justificacion);
+					
 				
 					
 					//Busca informacion de su jefe directo
@@ -137,12 +137,16 @@ public class JustificacionRestController {
 					try {
 						String nombre = user.getPersonal().getNombre() +" "+user.getPersonal().getApellido_paterno();
 						mailServiceImpl.sendEmail(destinatario, "Validar justificante","<b>" + nombre +"</b> hizo un nuevo justificante, tiene que validar. Ir a <a href='#'>Sistema TECH-PRO</a>");
+						justificacionServiceImpl.save(justificacion);
+						response.put("successful", true);
 						response.put("message", "Correo electrónico enviado, espere la respuesta");
 					} catch (MessagingException e) {
-						response.put("message", "Se creo la solicitud, pero no se envio el correo");
+						response.put("successful", false);
+						response.put("message", "No se creó la solicitud. Error al enviar correo");
+						return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 					}
 
-					response.put("successful", true);
+					
 					
 					
 				} else {
@@ -177,20 +181,24 @@ public class JustificacionRestController {
 
 		Long id_justificacion = Long.valueOf(payload.get("id_justificacion"));
 		int estatus = Integer.valueOf(payload.get("estatus"));
-		justificacionServiceImpl.updateEstatus(id_justificacion, estatus, user.getPersonal().getId_personal());
+		
 
 		Justificacion justificacion_update = justificacionServiceImpl.findById(id_justificacion);
 
 		try {
 			mailServiceImpl.sendEmail(justificacion_update.getId_personal().getCorreo_electronico(), "Respuesta a justificante","Han respondido a tu justificante Ir a <a href='#'>Sistema TECH-PRO</a>");
-			response.put("message", "Se notifico correctamente");
+			justificacionServiceImpl.updateEstatus(id_justificacion, estatus, user.getPersonal().getId_personal());
+			response.put("message", "Se notificó correctamente");
+			response.put("justificacion_update", justificacion_update);
+			response.put("successful", true);
 			
 		} catch (MessagingException e) {
-			response.put("message", "NO se envio email");
+			response.put("successful", false);
+			response.put("message", "No se aprobó. Error al enviar correo");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 			
 		}
-		response.put("justificacion_update", justificacion_update);
-		response.put("successful", true);
+		
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
@@ -301,14 +309,16 @@ public class JustificacionRestController {
 					// Setea el empleado que se justificara y se agregara a la lista de
 					// justificaciones si todo es correcto
 					List<String> destinatarios = justificaciones.stream().map(j -> j.getId_personal().getCorreo_electronico()).collect(Collectors.toList());
-					justificacionServiceImpl.saveAll(justificaciones);
+					
 					try {
 						mailServiceImpl.sendEmailMore(destinatarios,"Nueva justificación", "Se ha generado y aprobado una justificación/solicitud. Para ver detalles ingrese al sistema <a href='#'>Sistema TECH-PRO</a>");
+						justificacionServiceImpl.saveAll(justificaciones);
+						response.put("successful", true);
 						response.put("message", "Empleado(s) justificado(s). Correo electrónico enviado.");
 					} catch (MessagingException e) {
-						response.put("message", "Empleado(s) justificado(s). Correo No electrónico enviado.");
+						response.put("message", "No se crearón justificantes. Error al enviar correo");
 					}					
-					response.put("successful", true);
+					
 					
 
 				} else {
