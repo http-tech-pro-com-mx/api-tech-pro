@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,16 +55,19 @@ public class JustificacionRestController {
 	@Autowired
 	private MailServiceImpl mailServiceImpl;
 
+	@Secured({ "ROLE_CONSULTA_JST" })
 	@GetMapping("/findAll")
 	public List<Justificacion> findAll() {
 		return justificacionServiceImpl.findAll();
 	}
 
+	@Secured({ "ROLE_CONSULTA_JST" })
 	@GetMapping("/findById/{id_justificacion}")
 	public Justificacion findById(@PathVariable Long id_justificacion) {
 		return justificacionServiceImpl.findById(id_justificacion);
 	}
 
+	@Secured({ "ROLE_CONSULTA_JST" })
 	@GetMapping("/findAllJustificaciones")
 	public ResponseEntity<?> findAllJustificaciones(@AuthenticationPrincipal String user_active) {
 		Map<String, Object> response = new HashMap<>();
@@ -78,6 +82,7 @@ public class JustificacionRestController {
 
 	}
 
+	@Secured({ "ROLE_CREA_JST" })
 	@PostMapping(path = "/crear")
 	public ResponseEntity<?> saveJustificacion(@AuthenticationPrincipal String user_active,
 			@RequestBody Justificacion justificacion) {
@@ -160,7 +165,9 @@ public class JustificacionRestController {
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+	
 
+	@Secured({ "ROLE_VALIDA_JST" })
 	@PostMapping(path = "/autorizar")
 	public ResponseEntity<?> autorizarJutificacion(@AuthenticationPrincipal String user_active,
 			@RequestBody Map<String, String> payload) {
@@ -188,6 +195,7 @@ public class JustificacionRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
+	
 	@GetMapping("/findEmpleados")
 	public ResponseEntity<?> findEmpleados() {
 
@@ -202,6 +210,7 @@ public class JustificacionRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
+	@Secured({"ROLE_CREA_JST_EMPLEADO"})
 	@PostMapping(path = "/justificar-empleados")
 	public ResponseEntity<?> saveJustificacionEmpleados(@AuthenticationPrincipal String user_active,
 			@RequestBody Map<Object, Object> payload) {

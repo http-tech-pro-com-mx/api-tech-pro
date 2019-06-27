@@ -51,7 +51,7 @@ public class QuincenaController {
 	@Autowired
 	private Utils utils;
 
-	//@Secured({ "ROLE_CONSULTA_ADMIN" })
+	
 	@GetMapping("/findAll")
 	public ResponseEntity<?> index() {
 		Map<String, Object> response = new HashMap<>();
@@ -63,7 +63,6 @@ public class QuincenaController {
 
 	}
 
-	//@Secured({ "ROLE_CONSULTA" })
 	@GetMapping("/findAllAnioAndMonth")
 	public ResponseEntity<?> findAllAnioAndMonth() {
 
@@ -76,7 +75,6 @@ public class QuincenaController {
 
 	}
 
-	//@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@GetMapping("/findAllAnioAndMonthAndEmpleado")
 	public ResponseEntity<?> findAllPersonal() {
 
@@ -90,7 +88,7 @@ public class QuincenaController {
 
 	}
 
-	//@Secured({ "ROLE_CONSULTA_ADMIN" })
+	@Secured({ "ROLE_RPT_ADMIN" })
 	@PostMapping(path = "/reporteEntradaSalidaAdmin")
 	public ResponseEntity<?> historialQuincenaAdmin(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();
@@ -127,7 +125,7 @@ public class QuincenaController {
 
 	}
 
-	//@Secured({ "ROLE_CONSULTA" })
+	@Secured({ "ROLE_RPT_INDIVIDUAL" })
 	@PostMapping(path = "/reporteEntradaSalida")
 	public ResponseEntity<?> historialQuincena(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();
@@ -154,12 +152,11 @@ public class QuincenaController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
-	//@Secured({ "ROLE_CONSULTA_ADMIN" })
+	@Secured({ "ROLE_RPT_CONCENTRADO" })
 	@PostMapping(path = "/reporteGlobal")
 	public ResponseEntity<?> reporteGlobal(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();
 		List<Object[]> reporte = null;
-		List<Object[]> lista_hora_comida = null;
 		Long id_anio = Long.valueOf(params.get("anio"));
 		Long id_mes = Long.valueOf(params.get("mes"));
 		int quincena_number = Integer.valueOf(params.get("quincena"));
@@ -180,7 +177,7 @@ public class QuincenaController {
 
 	}
 
-	//@Secured({ "ROLE_CREATE_QUINCENA" })
+	@Secured({ "ROLE_CREA_QUINCENA" })
 	@PostMapping(path = "/create-quincena")
 	public ResponseEntity<?> create(@AuthenticationPrincipal String user_active,
 			@RequestBody Map<Object, Object> params) {
@@ -251,6 +248,7 @@ public class QuincenaController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
+	@Secured({ "ROLE_MODIFICA_QUINCENA" })
 	@PostMapping(path = "/update-quincena")
 	public ResponseEntity<?> update(@AuthenticationPrincipal String user_active,
 			@RequestBody Map<Object, Object> params) {

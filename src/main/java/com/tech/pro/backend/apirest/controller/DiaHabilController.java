@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +21,6 @@ public class DiaHabilController {
 	
 	@Autowired DiaHabilServiceImpl diaHabilServiceImpl;
 	
-	//@Secured({ "ROLE_CONSULTA_ADMIN" })
 	@GetMapping("/findDayByIdQuincena/{id_quincena}")
 	public ResponseEntity<?> findAllDaysByIdQuincena(@PathVariable("id_quincena") Long id_quincena) {		
 		Map<String, Object> response = new HashMap<>();
@@ -32,7 +30,6 @@ public class DiaHabilController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
-	//@Secured({ "ROLE_CONSULTA" })
 	@GetMapping("/findAll")
 	public ResponseEntity<?> findAllDays(){
 		Map<String, Object> response = new HashMap<>();

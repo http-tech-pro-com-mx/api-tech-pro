@@ -2,7 +2,6 @@ package com.tech.pro.backend.apirest.controller;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +56,7 @@ public class UsuarioRestController {
 	@Autowired
 	private MailServiceImpl mailServiceImpl;
 
-	// @Secured({"ROLE_CONSULTA_USUARIO"})
+	@Secured({"ROLE_CONSULTA_USUARIO"})
 	@GetMapping("/findAll")
 	public ResponseEntity<?> index() {
 		Map<String, Object> response = new HashMap<>();
@@ -71,7 +70,6 @@ public class UsuarioRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
-//	@Secured({"ROLE_CONSULTA_PERFIL"})
 	@GetMapping("/profile/{usuario}")
 	public ResponseEntity<?> findByUser(@PathVariable String usuario) {
 		Map<String, Object> response = new HashMap<>();
@@ -96,7 +94,7 @@ public class UsuarioRestController {
 
 	}
 
-	//@Secured({ "ROLE_CAMBIAR_PWD" })
+
 	@PostMapping(path = "/changePassword")
 	public ResponseEntity<?> changePassword(@AuthenticationPrincipal String user_active,
 			@RequestBody Map<String, String> params) {
@@ -207,6 +205,7 @@ public class UsuarioRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
+	@Secured({"ROLE_ACTIVA_USUARIO"})
 	@PostMapping(path = "/updateEstatus")
 	public ResponseEntity<?> updateEstatus(@AuthenticationPrincipal String user_active,
 			@RequestBody Map<String, String> params) {

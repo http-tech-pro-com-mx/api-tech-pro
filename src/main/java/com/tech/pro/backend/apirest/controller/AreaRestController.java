@@ -3,7 +3,6 @@ package com.tech.pro.backend.apirest.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +17,6 @@ public class AreaRestController {
 	@Autowired
 	private AreaServiceImpl areaService;
 	
-	//@Secured({ "ROLE_CONSULTA" })
 	@GetMapping("/findAll")
 	public List<Area> index(){
 		return areaService.findAll();
